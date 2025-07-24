@@ -1,10 +1,11 @@
 import './App.css';
+import { API_URL } from './config.js';  // Add this import!
 
 function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>� Matiq</h1>
+        <h1>MatIQ</h1>
         <p>A modern web application</p>
       </header>
       
