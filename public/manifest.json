@@ -1,0 +1,16 @@
+{
+  "name": "Wrestling Data Hub",
+  "short_name": "Wrestling Hub",
+  "description": "Your premier destination for wrestling analytics and insights",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1e3c72",
+  "theme_color": "#2a5298",
+  "icons": [
+    {
+      "src": "/wrestling-favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
