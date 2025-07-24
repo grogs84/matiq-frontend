@@ -12,9 +12,8 @@ dist
 dist-ssr
 *.local
 
-# Environment variables  
+# Local environment files
 .env.local
-.env.production.local
 
 # Vercel
 .vercel
