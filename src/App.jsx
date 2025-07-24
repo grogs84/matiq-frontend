@@ -15,7 +15,7 @@ function App() {
           
           <div className="quick-links">
             <a 
-              href="http://localhost:8000/docs" 
+              href={`${API_URL}/docs`}
               target="_blank" 
               rel="noopener noreferrer"
               className="link-button"
@@ -23,13 +23,19 @@ function App() {
               📚 API Documentation
             </a>
             <a 
-              href="http://localhost:8000/health" 
+              href={`${API_URL}/health`}
               target="_blank" 
               rel="noopener noreferrer"
               className="link-button"
             >
               ❤️ Health Check
             </a>
+          </div>
+          
+          {/* Debug info - remove this after testing */}
+          <div style={{ marginTop: '20px', padding: '10px', background: '#f0f0f0', fontSize: '12px' }}>
+            <strong>Debug Info:</strong><br />
+            Current API URL: {API_URL}
           </div>
         </div>
       </main>

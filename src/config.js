@@ -7,12 +7,10 @@ export const config = {
   isProduction: import.meta.env.PROD,
 };
 
-// Debug logging to help troubleshoot
-if (import.meta.env.DEV) {
-  console.log('🔧 Config Debug:');
-  console.log('API_URL:', API_URL);
-  console.log('Environment:', import.meta.env.MODE);
-  console.log('All env vars:', import.meta.env);
-}
+// Debug logging for both dev and production to troubleshoot
+console.log('🔧 Config Debug:');
+console.log('API_URL:', API_URL);
+console.log('Environment:', import.meta.env.MODE);
+console.log('VITE_API_URL env var:', import.meta.env.VITE_API_URL);
 
 export default config;
