@@ -14,7 +14,7 @@ dist-ssr
 
 # Local environment files
 .env.local
-
+.env*
 # Vercel
 .vercel
 
