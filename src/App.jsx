@@ -1,42 +1,45 @@
 import './App.css';
-import { API_URL } from './config.js';  // Add this import!
 
 function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>MatIQ</h1>
-        <p>A modern web application</p>
+        <h1>Wrestling Data Hub</h1>
+        <p>Your premier destination for wrestling analytics and insights</p>
       </header>
       
       <main className="app-main">
         <div className="welcome-card">
-          <h2>Welcome to Matiq</h2>
-          <p>Your application is ready for development!</p>
+          <h2>Welcome to Wrestling Data Hub</h2>
+          <p>Discover comprehensive wrestling statistics, match analysis, and performance insights all in one place.</p>
           
-          <div className="quick-links">
-            <a 
-              href={`${API_URL}/docs`}
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="link-button"
-            >
-              📚 API Documentation
-            </a>
-            <a 
-              href={`${API_URL}/health`}
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="link-button"
-            >
-              ❤️ Health Check
-            </a>
+          <div className="features-grid">
+            <div className="feature-card">
+              <span className="feature-icon">🤼</span>
+              <h3>Match Statistics</h3>
+              <p>Detailed analysis of wrestling matches, techniques, and outcomes</p>
+            </div>
+            <div className="feature-card">
+              <span className="feature-icon">📊</span>
+              <h3>Performance Analytics</h3>
+              <p>Track wrestler performance metrics and statistical trends</p>
+            </div>
+            <div className="feature-card">
+              <span className="feature-icon">🏆</span>
+              <h3>Tournament Results</h3>
+              <p>Comprehensive tournament brackets and championship records</p>
+            </div>
+            <div className="feature-card">
+              <span className="feature-icon">📈</span>
+              <h3>Trend Analysis</h3>
+              <p>Historical data and predictive insights for wrestling events</p>
+            </div>
           </div>
           
-          {/* Debug info - remove this after testing */}
-          <div style={{ marginTop: '20px', padding: '10px', background: '#f0f0f0', fontSize: '12px' }}>
-            <strong>Debug Info:</strong><br />
-            Current API URL: {API_URL}
+          <div className="action-section">
+            <h3>Explore Wrestling Data</h3>
+            <p>Start your journey into wrestling analytics with our comprehensive dataset</p>
+            <button className="cta-button">Coming Soon</button>
           </div>
         </div>
       </main>
