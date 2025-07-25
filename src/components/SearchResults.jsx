@@ -4,6 +4,8 @@
  * Displays search results for persons, schools, and tournaments
  */
 
+import { useNavigate } from 'react-router-dom';
+
 // Utility function to convert text to title case
 const toTitleCase = (str) => {
   if (!str) return '';
@@ -13,6 +15,7 @@ const toTitleCase = (str) => {
 };
 
 function SearchResultItem({ result }) {
+  const navigate = useNavigate();
   const getIcon = (type) => {
     switch (type) {
       case 'person': return '🤼';
@@ -36,8 +39,23 @@ function SearchResultItem({ result }) {
     }
   };
 
+  const handleClick = () => {
+    console.log('🖱️ Clicked search result:', result); // Debug log
+    
+    // Navigate to profile page for persons
+    if (result.result_type === 'person') {
+      // Use the person_id if available, otherwise generate a dummy ID based on name
+      const id = result.person_id || btoa(result.search_name || result.name).replace(/[^a-zA-Z0-9]/g, '').substring(0, 8);
+      console.log('🆔 Using ID for navigation:', id); // Debug log
+      navigate(`/profile/${id}`);
+    }
+  };
+
   return (
-    <div className="search-result-item">
+    <div 
+      className={`search-result-item ${result.result_type === 'person' ? 'clickable' : ''}`}
+      onClick={handleClick}
+    >
       <div className="result-icon">
         {getIcon(result.result_type)}
       </div>
