@@ -4,46 +4,93 @@ import { useState, useEffect } from 'react';
 import apiService from '../services/api.js';
 
 function ProfilePage() {
-  const { id } = useParams();
+//   const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // For now, create dummy profile data based on ID
-    // Later this would be an API call to get profile details
     const loadProfile = async () => {
       try {
         setLoading(true);
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 500));
         
-        // Create dummy profile data
-        setProfile({
-          id: id,
-          name: `Demo Person ${id}`,
-          type: 'person',
-          roles: ['Wrestler', 'Coach'],
-          school: 'Penn State University',
-          weight_class: '184 lbs',
-          wins: 42,
-          losses: 8,
-          bio: `This is a dummy profile page for person ID: ${id}. In a real application, this would fetch actual data from the API and display detailed information about the wrestler, coach, or other person.`,
-          achievements: [
-            'NCAA Division I Champion (2023)',
-            'Big Ten Conference Champion (2022, 2023)',
-            'All-American (2021, 2022, 2023)'
-          ],
-          stats: {
-            career_wins: 156,
-            career_losses: 23,
-            pins: 45,
-            tech_falls: 12,
-            major_decisions: 28
-          }
-        });
+        // Determine entity type from URL path
+        const currentPath = window.location.pathname;
+        let entityType = 'person'; // default
+        let apiEndpoint = `/person/${slug}`;
+        
+        if (currentPath.includes('/school/')) {
+          entityType = 'school';
+          apiEndpoint = `/school/${slug}`;
+        } else if (currentPath.includes('/tournament/')) {
+          entityType = 'tournament';
+          apiEndpoint = `/tournament/${slug}`;
+        }
+        
+        // Try to fetch real profile data first
+        try {
+          console.log(`🔍 Fetching ${entityType} data from:`, apiEndpoint);
+          const profileData = await apiService.get(apiEndpoint);
+          setProfile({
+            ...profileData,
+            entityType: entityType,
+            // Add additional dummy data for demo purposes
+            roles: entityType === 'person' ? ['Wrestler'] : [],
+            achievements: [
+              entityType === 'person' ? 'NCAA Division I Champion (2023)' : 
+              entityType === 'school' ? 'Top Wrestling Program' :
+              'Major Championship Tournament',
+              'Excellence in Competition',
+              'Outstanding Performance'
+            ],
+            stats: entityType === 'person' ? {
+              career_wins: 156,
+              career_losses: 23,
+              pins: 45,
+              tech_falls: 12,
+              major_decisions: 28
+            } : {}
+          });
+        } catch (apiError) {
+          // Fallback to dummy data if API fails
+          console.log('API failed, using dummy data:', apiError);
+          setProfile({
+            slug: slug,
+            entityType: entityType,
+            first_name: entityType === 'person' ? 'Demo' : undefined,
+            last_name: entityType === 'person' ? 'Person' : undefined,
+            search_name: entityType === 'person' ? `Demo Person ${slug}` : 
+                        entityType === 'school' ? `Demo School ${slug}` :
+                        `Demo Tournament ${slug}`,
+            name: entityType !== 'person' ? `Demo ${entityType} ${slug}` : undefined,
+            state_of_origin: entityType === 'person' ? 'PA' : undefined,
+            location: entityType !== 'person' ? 'Demo Location' : undefined,
+            roles: entityType === 'person' ? ['Wrestler', 'Coach'] : [],
+            school: entityType === 'person' ? 'Penn State University' : undefined,
+            weight_class: entityType === 'person' ? '184 lbs' : undefined,
+            wins: entityType === 'person' ? 42 : undefined,
+            losses: entityType === 'person' ? 8 : undefined,
+            bio: `This is a dummy ${entityType} page for slug: ${slug}. In a real application, this would fetch actual data from the API.`,
+            achievements: [
+              entityType === 'person' ? 'NCAA Division I Champion (2023)' :
+              entityType === 'school' ? 'Top Wrestling Program' :
+              'Major Championship Tournament',
+              'Excellence in Competition',
+              'Outstanding Performance'
+            ],
+            stats: entityType === 'person' ? {
+              career_wins: 156,
+              career_losses: 23,
+              pins: 45,
+              tech_falls: 12,
+              major_decisions: 28
+            } : {}
+          });
+        }
       } catch (err) {
+        console.error('Profile loading failed:', err);
         setError('Failed to load profile');
       } finally {
         setLoading(false);
@@ -51,7 +98,7 @@ function ProfilePage() {
     };
 
     loadProfile();
-  }, [id]);
+  }, [slug]); // Changed from [id] to [slug]
 
   if (loading) {
     return (
@@ -84,9 +131,14 @@ function ProfilePage() {
         <button onClick={() => navigate('/')} className="back-button">
           ← Back to Search
         </button>
-        <h1>{profile.name}</h1>
+        <h1>{profile.search_name || profile.name || `${profile.first_name} ${profile.last_name}` || `Demo ${profile.entityType}`}</h1>
         <div className="profile-badges">
-          {profile.roles.map((role, index) => (
+          <span className="profile-badge">
+            {profile.entityType === 'person' ? 'Person' : 
+             profile.entityType === 'school' ? 'School' : 
+             profile.entityType === 'tournament' ? 'Tournament' : 'Profile'}
+          </span>
+          {profile.roles?.map((role, index) => (
             <span key={index} className="profile-badge">
               {role}
             </span>
@@ -98,17 +150,37 @@ function ProfilePage() {
         <div className="profile-section">
           <h2>Basic Information</h2>
           <div className="profile-grid">
+            {profile.entityType === 'person' && (
+              <>
+                <div className="profile-item">
+                  <label>School:</label>
+                  <span>{profile.school || 'Unknown'}</span>
+                </div>
+                <div className="profile-item">
+                  <label>Weight Class:</label>
+                  <span>{profile.weight_class || 'Unknown'}</span>
+                </div>
+                <div className="profile-item">
+                  <label>State:</label>
+                  <span>{profile.state_of_origin || 'Unknown'}</span>
+                </div>
+              </>
+            )}
+            {profile.entityType === 'school' && (
+              <div className="profile-item">
+                <label>Location:</label>
+                <span>{profile.location || 'Unknown'}</span>
+              </div>
+            )}
+            {profile.entityType === 'tournament' && (
+              <div className="profile-item">
+                <label>Location:</label>
+                <span>{profile.location || 'Unknown'}</span>
+              </div>
+            )}
             <div className="profile-item">
-              <label>School:</label>
-              <span>{profile.school}</span>
-            </div>
-            <div className="profile-item">
-              <label>Weight Class:</label>
-              <span>{profile.weight_class}</span>
-            </div>
-            <div className="profile-item">
-              <label>Current Record:</label>
-              <span>{profile.wins}-{profile.losses}</span>
+              <label>Profile URL:</label>
+              <span>/{profile.entityType === 'person' ? 'profile' : profile.entityType}/{profile.slug}</span>
             </div>
           </div>
         </div>
@@ -119,25 +191,30 @@ function ProfilePage() {
         </div>
 
         <div className="profile-section">
-          <h2>Career Statistics</h2>
-          <div className="stats-grid">
-            <div className="stat-item">
-              <span className="stat-value">{profile.stats.career_wins}</span>
-              <span className="stat-label">Career Wins</span>
+          <h2>{profile.entityType === 'person' ? 'Career Statistics' : 'Statistics'}</h2>
+          {profile.entityType === 'person' && (
+            <div className="stats-grid">
+              <div className="stat-item">
+                <span className="stat-value">{profile.stats?.career_wins || 0}</span>
+                <span className="stat-label">Career Wins</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-value">{profile.stats?.career_losses || 0}</span>
+                <span className="stat-label">Career Losses</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-value">{profile.stats?.pins || 0}</span>
+                <span className="stat-label">Pins</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-value">{profile.stats?.tech_falls || 0}</span>
+                <span className="stat-label">Tech Falls</span>
+              </div>
             </div>
-            <div className="stat-item">
-              <span className="stat-value">{profile.stats.career_losses}</span>
-              <span className="stat-label">Career Losses</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-value">{profile.stats.pins}</span>
-              <span className="stat-label">Pins</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-value">{profile.stats.tech_falls}</span>
-              <span className="stat-label">Tech Falls</span>
-            </div>
-          </div>
+          )}
+          {profile.entityType !== 'person' && (
+            <p>Statistics and data for this {profile.entityType} will be available soon.</p>
+          )}
         </div>
 
         <div className="profile-section">

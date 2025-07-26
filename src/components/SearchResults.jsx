@@ -45,9 +45,10 @@ function SearchResultItem({ result }) {
     // Navigate to profile page for persons
     if (result.result_type === 'person') {
       // Use the person_id if available, otherwise generate a dummy ID based on name
-      const id = result.person_id || btoa(result.search_name || result.name).replace(/[^a-zA-Z0-9]/g, '').substring(0, 8);
-      console.log('🆔 Using ID for navigation:', id); // Debug log
-      navigate(`/profile/${id}`);
+      // const id = result.person_id || btoa(result.search_name || result.name).replace(/[^a-zA-Z0-9]/g, '').substring(0, 8);
+      const slug = result.slug;
+      console.log('🆔 Using slug for navigation:', slug); // Debug log
+      navigate(`/profile/${slug}`);
     }
   };
 

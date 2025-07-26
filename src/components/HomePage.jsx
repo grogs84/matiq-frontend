@@ -117,9 +117,10 @@ function SearchBar({ onSearch, onLookAhead }) {
     // Navigate to profile page for persons, otherwise do search
     if (suggestion.result_type === 'person') {
       // Use person_id if available, otherwise generate a dummy ID
-      const id = suggestion.person_id || btoa(suggestion.search_name || suggestion.name).replace(/[^a-zA-Z0-9]/g, '').substring(0, 8);
-      console.log('🆔 Using ID for navigation:', id); // Debug log
-      navigate(`/profile/${id}`);
+    //   const id = suggestion.person_id || btoa(suggestion.search_name || suggestion.name).replace(/[^a-zA-Z0-9]/g, '').substring(0, 8);
+      const slug = suggestion.slug;
+      console.log('🆔 Using slug for navigation:', slug);
+      navigate(`/profile/${slug}`);
     } else {
       const query = suggestion.search_name || suggestion.name;
       setInputValue(query);
