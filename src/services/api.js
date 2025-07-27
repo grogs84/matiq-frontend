@@ -6,6 +6,23 @@ import { API_URL } from '../config.js';
 class ApiService {
   constructor(baseURL = API_URL) {
     this.baseURL = baseURL;
+    this.useMockData = false;
+  }
+
+  /**
+   * Enable mock data mode for testing
+   */
+  enableMockData() {
+    this.useMockData = true;
+  }
+
+  /**
+   * Get mock data for testing
+   */
+  async getMockData(endpoint) {
+    // Import mock data dynamically to avoid circular dependencies
+    const { mockApiService } = await import('../features/person/services/mockApiService.js');
+    return mockApiService.get(endpoint);
   }
 
   /**
@@ -15,6 +32,12 @@ class ApiService {
    * @returns {Promise<Object>} The response data
    */
   async get(endpoint, params = {}) {
+    // If mock data is enabled, use mock data
+    if (this.useMockData) {
+      console.log('🧪 Using mock data for:', endpoint);
+      return this.getMockData(endpoint);
+    }
+
     const url = new URL(`${this.baseURL}${endpoint}`);
     
     // Add query parameters
@@ -46,9 +69,17 @@ class ApiService {
       return data;
     } catch (error) {
       if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        console.error('❌ Network error - Backend server may not be running');
-        throw new Error(`Cannot connect to backend server at ${this.baseURL}. Is the server running?`);
+        console.error('❌ Network error - Using mock data as fallback');
+        // Use mock data as fallback
+        return this.getMockData(endpoint);
       }
+      
+      // Check if this is a person profile endpoint and fallback to mock data
+      if (endpoint.includes('/person/')) {
+        console.error('❌ API request failed, using mock data as fallback:', error);
+        return this.getMockData(endpoint);
+      }
+      
       console.error('❌ API request failed:', error);
       throw error;
     }

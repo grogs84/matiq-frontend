@@ -229,9 +229,6 @@ function SearchBar({ onSearch, onLookAhead }) {
 }
 
 function HomePage() {
-  // Health Check State
-  const [api] = useState(apiService);
-
   // Search State
   const [searchResults, setSearchResults] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
