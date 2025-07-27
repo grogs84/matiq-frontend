@@ -3,6 +3,7 @@ import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useWrestlerMatches from '../hooks/useWrestlerMatches.js';
 import LoadingSpinner from '../../../components/common/LoadingSpinner.jsx';
+import { toTitleCase } from '../../../utils/textUtils.js';
 
 /**
  * Matches tab showing wrestler match history with pagination
@@ -140,13 +141,13 @@ function MatchesTab({ slug }) {
                       className="opponent-link"
                       onClick={() => handleOpponentClick(match.opponent_slug)}
                     >
-                      {match.opponent_name}
+                      {toTitleCase(match.opponent_name)}
                     </button>
                   ) : (
-                    <span>{match.opponent_name}</span>
+                    <span>{toTitleCase(match.opponent_name)}</span>
                   )}
                 </td>
-                <td>{match.opponent_school_name}</td>
+                <td>{toTitleCase(match.opponent_school_name)}</td>
                 <td>
                   <span className={`result-badge ${match.is_winner ? 'win' : 'loss'}`}>
                     {match.is_winner ? 'Win' : 'Loss'}

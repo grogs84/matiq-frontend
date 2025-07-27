@@ -48,7 +48,7 @@ function SearchResultItem({ result }) {
       // const id = result.person_id || btoa(result.search_name || result.name).replace(/[^a-zA-Z0-9]/g, '').substring(0, 8);
       const slug = result.slug;
       console.log('🆔 Using slug for navigation:', slug); // Debug log
-      navigate(`/profile/${slug}`);
+      navigate(`/person/${slug}`);
     }
   };
 

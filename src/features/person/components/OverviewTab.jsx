@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { toTitleCase } from '../../../utils/textUtils.js';
 
 /**
  * Overview tab showing basic person information
@@ -25,15 +26,15 @@ function OverviewTab({ profile }) {
         <div className="info-grid">
           <div className="info-item">
             <label>First Name:</label>
-            <span>{profile.first_name || 'Not specified'}</span>
+            <span>{toTitleCase(profile.first_name) || 'Not specified'}</span>
           </div>
           <div className="info-item">
             <label>Last Name:</label>
-            <span>{profile.last_name || 'Not specified'}</span>
+            <span>{toTitleCase(profile.last_name) || 'Not specified'}</span>
           </div>
           <div className="info-item">
             <label>Search Name:</label>
-            <span>{profile.search_name || 'Not specified'}</span>
+            <span>{toTitleCase(profile.search_name) || 'Not specified'}</span>
           </div>
           <div className="info-item">
             <label>Date of Birth:</label>
@@ -41,11 +42,11 @@ function OverviewTab({ profile }) {
           </div>
           <div className="info-item">
             <label>City of Origin:</label>
-            <span>{profile.city_of_origin || 'Not specified'}</span>
+            <span>{toTitleCase(profile.city_of_origin) || 'Not specified'}</span>
           </div>
           <div className="info-item">
             <label>State of Origin:</label>
-            <span>{profile.state_of_origin || 'Not specified'}</span>
+            <span>{toTitleCase(profile.state_of_origin) || 'Not specified'}</span>
           </div>
         </div>
       </div>
@@ -57,7 +58,7 @@ function OverviewTab({ profile }) {
             {profile.roles.map((role, index) => (
               <div key={role.role_id || index} className="role-item">
                 <span className="role-badge">
-                  {role.role_type.charAt(0).toUpperCase() + role.role_type.slice(1)}
+                  {toTitleCase(role.role_type)}
                 </span>
               </div>
             ))}
@@ -71,7 +72,7 @@ function OverviewTab({ profile }) {
           <div className="profile-image-section">
             <img 
               src={profile.profile_image_url} 
-              alt={`${profile.first_name} ${profile.last_name}`}
+              alt={`${toTitleCase(profile.first_name)} ${toTitleCase(profile.last_name)}`}
               className="profile-image-large"
             />
           </div>

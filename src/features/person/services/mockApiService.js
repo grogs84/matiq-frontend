@@ -129,6 +129,37 @@ export const mockApiService = {
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 500));
     
+    // Handle search endpoints
+    if (endpoint.includes('/search/')) {
+      return {
+        results: [
+          {
+            person_id: "123e4567-e89b-12d3-a456-426614174000",
+            slug: "david-taylor",
+            first_name: "David",
+            last_name: "Taylor",
+            search_name: "David Taylor",
+            result_type: "person",
+            roles: ["wrestler"],
+            metadata: "Penn State"
+          },
+          {
+            person_id: "456e7890-e89b-12d3-a456-426614174001", 
+            slug: "cael-sanderson",
+            first_name: "Cael",
+            last_name: "Sanderson",
+            search_name: "Cael Sanderson",
+            result_type: "person",
+            roles: ["coach"],
+            metadata: "Penn State"
+          }
+        ],
+        total: 2,
+        page: 1,
+        page_size: 20
+      };
+    }
+    
     if (endpoint.includes('/person/david-taylor/wrestler/stats')) {
       return mockWrestlerStats;
     }

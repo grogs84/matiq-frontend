@@ -120,7 +120,7 @@ function SearchBar({ onSearch, onLookAhead }) {
     //   const id = suggestion.person_id || btoa(suggestion.search_name || suggestion.name).replace(/[^a-zA-Z0-9]/g, '').substring(0, 8);
       const slug = suggestion.slug;
       console.log('🆔 Using slug for navigation:', slug);
-      navigate(`/profile/${slug}`);
+      navigate(`/person/${slug}`);
     } else {
       const query = suggestion.search_name || suggestion.name;
       setInputValue(query);

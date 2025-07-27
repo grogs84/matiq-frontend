@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useNavigate } from 'react-router-dom';
+import { toTitleCase, formatLocation } from '../../../utils/textUtils.js';
 
 /**
  * Profile header component displaying person's name, image, and basic info
@@ -7,19 +7,13 @@ import { useNavigate } from 'react-router-dom';
  * @param {import('../types/person.types.js').PersonProfile} props.profile - Person profile data
  */
 function ProfileHeader({ profile }) {
-  const navigate = useNavigate();
-
   if (!profile) return null;
 
-  const fullName = `${profile.first_name} ${profile.last_name}`;
+  const fullName = `${toTitleCase(profile.first_name)} ${toTitleCase(profile.last_name)}`;
   const isWrestler = profile.roles?.some(role => role.role_type === 'wrestler');
 
   return (
     <div className="profile-header">
-      <button onClick={() => navigate('/')} className="back-button">
-        ← Back to Search
-      </button>
-      
       <div className="profile-header-content">
         <div className="profile-image-container">
           {profile.profile_image_url ? (
@@ -38,7 +32,7 @@ function ProfileHeader({ profile }) {
         </div>
         
         <div className="profile-header-info">
-          <h1 className="profile-name">{profile.search_name || fullName}</h1>
+          <h1 className="profile-name">{toTitleCase(profile.search_name) || fullName}</h1>
           
           <div className="profile-badges">
             <span className="profile-badge person-badge">Person</span>
@@ -48,7 +42,7 @@ function ProfileHeader({ profile }) {
             {profile.roles?.map((role, index) => (
               role.role_type !== 'wrestler' && (
                 <span key={index} className="profile-badge role-badge">
-                  {role.role_type}
+                  {toTitleCase(role.role_type)}
                 </span>
               )
             ))}
@@ -56,7 +50,7 @@ function ProfileHeader({ profile }) {
 
           {(profile.city_of_origin || profile.state_of_origin) && (
             <div className="profile-location">
-              📍 {[profile.city_of_origin, profile.state_of_origin].filter(Boolean).join(', ')}
+              📍 {formatLocation(profile.city_of_origin, profile.state_of_origin)}
             </div>
           )}
         </div>
