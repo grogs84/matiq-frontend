@@ -20,10 +20,10 @@ function PersonProfile() {
 
   if (loading) {
     return (
-      <div className="person-profile loading">
-        <div className="loading-container">
-          <LoadingSpinner />
-          <p>Loading profile...</p>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <LoadingSpinner size="large" />
+          <p className="mt-4 text-gray-600">Loading profile...</p>
         </div>
       </div>
     );
@@ -31,11 +31,11 @@ function PersonProfile() {
 
   if (error) {
     return (
-      <div className="person-profile error">
-        <div className="error-container">
-          <h2>Profile Not Found</h2>
-          <p>{error}</p>
-          <p>The person you&apos;re looking for might not exist or there was an error loading their profile.</p>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center p-8">
+          <h2 className="text-2xl font-bold text-accent mb-4">Profile Not Found</h2>
+          <p className="text-gray-600 mb-2">{error}</p>
+          <p className="text-gray-600">The person you're looking for might not exist or there was an error loading their profile.</p>
         </div>
       </div>
     );
@@ -43,20 +43,20 @@ function PersonProfile() {
 
   if (!profile) {
     return (
-      <div className="person-profile error">
-        <div className="error-container">
-          <h2>Profile Not Found</h2>
-          <p>No profile data available.</p>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center p-8">
+          <h2 className="text-2xl font-bold text-accent mb-4">Profile Not Found</h2>
+          <p className="text-gray-600">No profile data available.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="person-profile">
+    <div className="min-h-screen bg-background">
       <ProfileHeader profile={profile} />
       
-      <div className="person-profile-content">
+      <div className="max-w-8xl mx-auto px-4 py-8">
         <ProfileTabs
           profile={profile}
           initialTab={initialTab}

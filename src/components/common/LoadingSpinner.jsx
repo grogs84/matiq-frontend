@@ -10,8 +10,7 @@ function LoadingSpinner({ size = "medium" }) {
   };
 
   return (
-    <div className={`loading-spinner ${sizeClasses[size] || sizeClasses.medium}`}>
-      <div className="spinner-inner"></div>
+    <div className={`${sizeClasses[size] || sizeClasses.medium} border-2 border-gray-300 border-t-primary rounded-full animate-spin`}>
     </div>
   );
 }

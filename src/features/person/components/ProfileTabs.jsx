@@ -43,12 +43,16 @@ function ProfileTabs({
   ].filter(tab => tab.enabled);
 
   return (
-    <div className="profile-tabs">
-      <div className="tab-navigation">
+    <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+      <div className="flex bg-gray-50 border-b border-gray-200">
         {tabs.map(tab => (
           <button
             key={tab.id}
-            className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
+            className={`flex-1 py-4 px-6 bg-transparent border-none text-base font-medium cursor-pointer transition-all duration-200 ${
+              activeTab === tab.id 
+                ? 'bg-white text-primary border-b-2 border-primary' 
+                : 'text-gray-600 hover:bg-gray-100 hover:text-foreground'
+            }`}
             onClick={() => setActiveTab(tab.id)}
           >
             {tab.label}
@@ -56,7 +60,7 @@ function ProfileTabs({
         ))}
       </div>
       
-      <div className="tab-content">
+      <div className="p-8">
         {tabs.find(tab => tab.id === activeTab)?.content}
       </div>
     </div>
