@@ -45,11 +45,15 @@ function HealthCheck() {
   return (
     <div className="health-check">
       <button 
-        className="health-check-button" 
+        className="bg-primary text-white border-none py-3 px-4 rounded-full text-sm font-medium cursor-pointer shadow-md transition-all duration-200 flex items-center gap-2 hover:bg-primary-800 hover:-translate-y-1 hover:shadow-lg disabled:opacity-50" 
         onClick={checkHealth}
         disabled={isLoading}
       >
-        <span className={`health-status ${getStatusClass()}`}></span>
+        <span className={`w-2 h-2 rounded-full ${
+          healthStatus === 'healthy' ? 'bg-green-400' : 
+          healthStatus === 'unhealthy' ? 'bg-red-400' : 
+          'bg-yellow-400 animate-pulse'
+        }`}></span>
         {isLoading ? 'Checking...' : 'Health Check'}
       </button>
     </div>
@@ -154,38 +158,38 @@ function SearchBar({ onSearch, onLookAhead }) {
   }, []);
 
   return (
-    <div className="search-wrapper" ref={dropdownRef}>
-      <form onSubmit={handleSubmit} className="search-form">
-        <div className="search-container">
+    <div className="relative max-w-2xl mx-auto" ref={dropdownRef}>
+      <form onSubmit={handleSubmit} className="w-full">
+        <div className="relative flex items-center">
           <input
             type="text"
             value={inputValue}
             onChange={handleInputChange}
             placeholder="Search wrestlers, schools, coaches, or tournaments..."
-            className="search-input"
+            className="flex-1 px-4 py-3 pr-28 text-base border-2 border-gray-300 rounded-lg outline-none transition-colors duration-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
             autoComplete="off"
           />
           {inputValue && (
             <button 
               type="button" 
               onClick={handleClear}
-              className="clear-button"
+              className="absolute right-20 bg-transparent border-none text-xl text-gray-600 cursor-pointer p-1 rounded-full w-7 h-7 flex items-center justify-center transition-all duration-200 hover:bg-gray-100 hover:text-gray-800"
               aria-label="Clear search"
             >
               ×
             </button>
           )}
-          <button type="submit" className="search-button">
+          <button type="submit" className="absolute right-2 bg-blue-600 text-white border-none py-2 px-4 rounded-md cursor-pointer text-sm font-medium transition-colors duration-200 hover:bg-blue-700">
             Search
           </button>
         </div>
       </form>
       
       {showDropdown && (
-        <div className="search-dropdown">
+        <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 border-t-0 rounded-b-lg shadow-lg z-50 max-h-80 overflow-y-auto">
           {isLoadingSuggestions ? (
-            <div className="dropdown-loading">
-              <div className="loading-spinner-small"></div>
+            <div className="flex items-center p-4 text-gray-600">
+              <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin mr-2"></div>
               <span>Searching...</span>
             </div>
           ) : suggestions.length > 0 ? (
@@ -193,25 +197,25 @@ function SearchBar({ onSearch, onLookAhead }) {
               {suggestions.map((suggestion, index) => (
                 <div
                   key={`suggestion-${index}`}
-                  className="dropdown-item"
+                  className="flex items-center justify-between p-3 cursor-pointer transition-colors duration-200 border-b border-gray-100 last:border-b-0 text-left hover:bg-gray-50"
                   onClick={() => handleSuggestionClick(suggestion)}
                 >
-                  <span className="suggestion-text">
+                  <span className="flex-1 text-gray-800 font-medium text-left">
                     {toTitleCase(suggestion.search_name || suggestion.name)}
                   </span>
-                  <div className="suggestion-badges">
+                  <div className="flex gap-1 ml-2">
                     {suggestion.result_type === 'person' ? (
                       suggestion.roles && suggestion.roles.length > 0 ? (
                         suggestion.roles.map((role, roleIndex) => (
-                          <span key={roleIndex} className="suggestion-type">
+                          <span key={roleIndex} className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-xl whitespace-nowrap">
                             {toTitleCase(role)}
                           </span>
                         ))
                       ) : (
-                        <span className="suggestion-type">Person</span>
+                        <span className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-xl whitespace-nowrap">Person</span>
                       )
                     ) : (
-                      <span className="suggestion-type">
+                      <span className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-xl whitespace-nowrap">
                         {toTitleCase(suggestion.result_type)}
                       </span>
                     )}
@@ -220,7 +224,7 @@ function SearchBar({ onSearch, onLookAhead }) {
               ))}
             </>
           ) : (
-            <div className="dropdown-empty">No suggestions found</div>
+            <div className="p-4 text-center text-gray-600 italic">No suggestions found</div>
           )}
         </div>
       )}
@@ -302,29 +306,29 @@ function HomePage() {
   ];
 
   return (
-    <div className="app">
-      <div className="container">
+    <div className="min-h-screen bg-background">
+      <div className="max-w-8xl mx-auto px-4 py-12">
         {/* Hero Section */}
-        <section className="hero-section">
-          <div className="hero-content">
-            <h1 className="hero-title">
+        <section className="text-center mb-24">
+          <div className="mb-8">
+            <h1 className="text-5xl font-bold text-foreground mb-4 leading-tight">
               D1 NCAA Wrestling Championship Data Hub
             </h1>
-            <p className="hero-description">
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
               Your comprehensive NCAA D1 Wrestling Championship data resource. 
               Search wrestlers, explore school programs, and view tournament brackets.
             </p>
           </div>
           
           {/* Search Interface */}
-          <div className="search-section">
+          <div className="max-w-4xl mx-auto">
             <SearchBar onSearch={handleSearch} onLookAhead={handleLookAhead} />
           </div>
         </section>
 
         {/* Search Results */}
         {showResults && (
-          <section className="search-results-section">
+          <section className="mb-16">
             <SearchResults 
               results={searchResults}
               isLoading={isSearching}
@@ -336,22 +340,22 @@ function HomePage() {
 
         {/* Browse Cards - Hide when showing search results */}
         {!showResults && (
-          <section className="browse-section">
-            <div className="section-header">
-              <h2 className="section-title">Explore Wrestling Data</h2>
-              <p className="section-description">Discover comprehensive wrestling information across multiple categories</p>
+          <section className="mb-24">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-foreground mb-4">Explore Wrestling Data</h2>
+              <p className="text-base text-gray-600 max-w-2xl mx-auto">Discover comprehensive wrestling information across multiple categories</p>
             </div>
             
-            <div className="browse-grid">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {browseCards.map((card, index) => (
-                <div key={index} className="browse-card">
-                  <div className="card-header">
-                    <div className="card-icon">{card.icon}</div>
-                    <h3 className="card-title">{card.title}</h3>
-                    <p className="card-description">{card.description}</p>
+                <div key={index} className="bg-white rounded-lg border border-gray-200 p-6 text-center transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-1">
+                  <div className="mb-4">
+                    <div className="text-4xl mb-4 block">{card.icon}</div>
+                    <h3 className="text-lg font-semibold text-foreground mb-2">{card.title}</h3>
+                    <p className="text-sm text-gray-600 leading-relaxed">{card.description}</p>
                   </div>
-                  <div className="card-content">
-                    <button className="explore-button">
+                  <div className="text-center">
+                    <button className="w-full py-3 px-6 border border-primary bg-transparent text-primary rounded-md font-medium cursor-pointer transition-all duration-200 hover:bg-primary hover:text-white">
                       Explore
                     </button>
                   </div>
@@ -362,7 +366,7 @@ function HomePage() {
         )}
 
         {/* Health Check - Development Only */}
-        <div className="dev-health-check">
+        <div className="fixed bottom-5 right-5 z-50">
           <HealthCheck />
         </div>
       </div>
