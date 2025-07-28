@@ -4,11 +4,10 @@ import SearchBar from './SearchBar.jsx';
 /**
  * SearchHero component - displays the main hero section with title, stats, and search bar
  * @component
- * @param {Function} onSearch - Callback function for search submit
- * @param {Function} onLookAhead - Callback function for look-ahead suggestions
+ * @param {Object} searchProps - All search-related props to pass to SearchBar
  * @returns {JSX.Element} The SearchHero component
  */
-function SearchHero({ onSearch, onLookAhead }) {
+function SearchHero({ searchProps }) {
   return (
     <section className="pt-8 sm:pt-16 pb-12">
       <div className="text-center max-w-4xl mx-auto">
@@ -43,7 +42,7 @@ function SearchHero({ onSearch, onLookAhead }) {
       
       {/* Enhanced Search Interface */}
       <div className="mb-8">
-        <SearchBar onSearch={onSearch} onLookAhead={onLookAhead} />
+        <SearchBar {...searchProps} />
       </div>
     </section>
   );

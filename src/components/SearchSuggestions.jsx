@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import { useNavigate } from 'react-router-dom';
 
 // Utility function to convert text to title case
 const toTitleCase = (str) => {
@@ -15,28 +14,10 @@ const toTitleCase = (str) => {
  * @param {Array} suggestions - Array of suggestion objects
  * @param {boolean} isLoading - Whether suggestions are loading
  * @param {boolean} showDropdown - Whether to show the dropdown
- * @param {Function} onSuggestionClick - Callback when suggestion is clicked
- * @param {Function} onSearch - Callback for search functionality
+ * @param {Function} onSuggestionClick - Callback when suggestion is clicked (now handles navigation)
  * @returns {JSX.Element|null} The SearchSuggestions component
  */
-function SearchSuggestions({ suggestions, isLoading, showDropdown, onSuggestionClick, onSearch }) {
-  const navigate = useNavigate();
-
-  const handleSuggestionClick = (suggestion) => {
-    console.log('🖱️ Clicked suggestion:', suggestion); // Debug log
-    
-    // Navigate to profile page for persons, otherwise do search
-    if (suggestion.result_type === 'person') {
-      const slug = suggestion.slug;
-      console.log('🆔 Using slug for navigation:', slug);
-      navigate(`/person/${slug}`);
-    } else {
-      const query = suggestion.search_name || suggestion.name;
-      onSearch(query);
-    }
-    onSuggestionClick(suggestion);
-  };
-
+function SearchSuggestions({ suggestions, isLoading, showDropdown, onSuggestionClick }) {
   if (!showDropdown) {
     return null;
   }
@@ -54,7 +35,7 @@ function SearchSuggestions({ suggestions, isLoading, showDropdown, onSuggestionC
             <div
               key={`suggestion-${index}`}
               className="px-4 py-3 hover:bg-neutral-50/80 dark:hover:bg-neutral-700/50 cursor-pointer border-b border-neutral-100/50 dark:border-neutral-700/50 last:border-b-0 transition-all duration-200 group"
-              onClick={() => handleSuggestionClick(suggestion)}
+              onClick={() => onSuggestionClick(suggestion)}
             >
               <div className="flex items-center justify-between">
                 <span className="text-neutral-800 dark:text-neutral-200 font-medium group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200">
