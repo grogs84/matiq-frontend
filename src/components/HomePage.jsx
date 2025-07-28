@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import apiService from '../services/api.js';
+import useSearch from '../hooks/useSearch.js';
+import useHealthCheck from '../hooks/useHealthCheck.js';
 import SearchResults from './SearchResults.jsx';
 
 // Utility function to convert text to title case
@@ -14,25 +15,11 @@ const toTitleCase = (str) => {
 
 // Health Check Component
 function HealthCheck() {
-  const [healthStatus, setHealthStatus] = useState('unknown');
-  const [isLoading, setIsLoading] = useState(false);
-
-  const checkHealth = async () => {
-    setIsLoading(true);
-    try {
-      const response = await apiService.healthCheck();
-      setHealthStatus(response.status === 'healthy' ? 'healthy' : 'unhealthy');
-    } catch (error) {
-      console.error('Health check failed:', error);
-      setHealthStatus('unhealthy');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { healthStatus, isLoading, checkHealth } = useHealthCheck();
 
   useEffect(() => {
     checkHealth();
-  }, []);
+  }, [checkHealth]);
 
   const getStatusStyles = () => {
     switch (healthStatus) {
@@ -259,18 +246,15 @@ function SearchBar({ onSearch, onLookAhead }) {
 }
 
 function HomePage() {
-  // Search State
-  const [searchResults, setSearchResults] = useState(null);
-  const [isSearching, setIsSearching] = useState(false);
-  const [searchError, setSearchError] = useState(null);
+  // Search functionality using custom hook
+  const { results: searchResults, loading: isSearching, error: searchError, search, clearResults } = useSearch();
   const [currentQuery, setCurrentQuery] = useState('');
   const [showResults, setShowResults] = useState(false);
 
   const handleSearch = async (query) => {
     if (!query.trim()) {
       // Clear results if empty query
-      setSearchResults(null);
-      setSearchError(null);
+      clearResults();
       setShowResults(false);
       setCurrentQuery('');
       return;
@@ -278,30 +262,21 @@ function HomePage() {
 
     console.log('Searching for:', query);
     setCurrentQuery(query);
-    setIsSearching(true);
-    setSearchError(null);
     setShowResults(true);
 
     try {
-      const results = await apiService.search(query);
-      console.log('🔍 Main search API Response:', results); // Debug log
-      console.log('🔍 Search results array:', results.results); // Debug results array
-      setSearchResults(results);
+      await search(query);
     } catch (error) {
       console.error('Search failed:', error);
-      setSearchError(error);
-      setSearchResults(null);
-    } finally {
-      setIsSearching(false);
     }
   };
 
   const handleLookAhead = async (query) => {
     // For look-ahead, we'll do a quick search with a smaller limit
-    const results = await apiService.search(query, 5);
+    const results = await search(query, 5);
     console.log('🔍 Look-ahead API Response:', results); // Debug log
-    console.log('🔍 First result:', results.results?.[0]); // Debug first result
-    return results.results || [];
+    console.log('🔍 First result:', results?.results?.[0]); // Debug first result
+    return results?.results || [];
   };
 
   const browseCards = [

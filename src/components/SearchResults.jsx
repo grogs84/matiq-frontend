@@ -147,7 +147,7 @@ function SearchResults({ results, isLoading, error, query }) {
       <div className="card p-8 text-center">
         <div className="text-neutral-400 dark:text-neutral-500 text-4xl mb-4">🔍</div>
         <h3 className="text-xl font-semibold text-neutral-800 dark:text-neutral-200 mb-2">No results found</h3>
-        <p className="text-neutral-600 dark:text-neutral-400 mb-2">No matches found for "{query || searchQuery}"</p>
+        <p className="text-neutral-600 dark:text-neutral-400 mb-2">No matches found for &ldquo;{query || searchQuery}&rdquo;</p>
         <p className="text-neutral-500 dark:text-neutral-500 text-sm">Try searching with different keywords or check your spelling.</p>
       </div>
     );
@@ -168,7 +168,7 @@ function SearchResults({ results, isLoading, error, query }) {
       <div className="card p-4 sm:p-6">
         <h2 className="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white mb-2">Search Results</h2>
         <p className="text-neutral-600 dark:text-neutral-400">
-          Found <span className="font-semibold text-primary-600 dark:text-primary-400">{total_results}</span> result{total_results !== 1 ? 's' : ''} for "{toTitleCase(query || searchQuery)}"
+          Found <span className="font-semibold text-primary-600 dark:text-primary-400">{total_results}</span> result{total_results !== 1 ? 's' : ''} for &ldquo;{toTitleCase(query || searchQuery)}&rdquo;
         </p>
       </div>
 
