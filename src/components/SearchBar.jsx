@@ -1,0 +1,138 @@
+/* eslint-disable react/prop-types */
+import { useState, useEffect, useRef } from 'react';
+import SearchSuggestions from './SearchSuggestions.jsx';
+
+/**
+ * SearchBar component - provides search input with suggestions dropdown
+ * @component
+ * @param {Function} onSearch - Callback function for search submit
+ * @param {Function} onLookAhead - Callback function for look-ahead suggestions
+ * @returns {JSX.Element} The SearchBar component
+ */
+function SearchBar({ onSearch, onLookAhead }) {
+  const [inputValue, setInputValue] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+  const debounceTimeoutRef = useRef(null);
+  const dropdownRef = useRef(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const query = inputValue.trim();
+    if (query) {
+      onSearch(query);
+      setShowDropdown(false);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setInputValue(value);
+    
+    // Clear existing timeout
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+    
+    // Clear results if input is empty
+    if (!value.trim()) {
+      onSearch('');
+      setSuggestions([]);
+      setShowDropdown(false);
+      return;
+    }
+
+    // Debounce the look-ahead search
+    debounceTimeoutRef.current = setTimeout(async () => {
+      if (value.trim().length >= 2) {
+        setIsLoadingSuggestions(true);
+        try {
+          const results = await onLookAhead(value.trim());
+          setSuggestions(results.slice(0, 5)); // Limit to 5 suggestions
+          setShowDropdown(true);
+        } catch (error) {
+          console.error('Look-ahead search failed:', error);
+          setSuggestions([]);
+        } finally {
+          setIsLoadingSuggestions(false);
+        }
+      }
+    }, 300); // 300ms debounce
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    setInputValue(suggestion.search_name || suggestion.name);
+    setShowDropdown(false);
+  };
+
+  const handleClear = () => {
+    setInputValue('');
+    setSuggestions([]);
+    setShowDropdown(false);
+    onSearch('');
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <div className="relative w-full max-w-2xl mx-auto px-4 sm:px-0" ref={dropdownRef}>
+      <form onSubmit={handleSubmit} className="w-full">
+        <div className="relative group">
+          <input
+            type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+            placeholder="Search wrestlers, schools, coaches, or tournaments..."
+            className="w-full px-4 sm:px-6 py-3 sm:py-4 pr-20 sm:pr-24 text-base sm:text-lg border-2 border-neutral-300 dark:border-neutral-600 rounded-xl sm:rounded-2xl bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm text-neutral-900 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all duration-300 shadow-lg hover:shadow-xl focus:shadow-glow"
+            autoComplete="off"
+          />
+          {inputValue && (
+            <button 
+              type="button" 
+              onClick={handleClear}
+              className="absolute right-16 sm:right-20 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 text-xl w-6 h-6 flex items-center justify-center transition-colors duration-200"
+              aria-label="Clear search"
+            >
+              ×
+            </button>
+          )}
+          <button 
+            type="submit" 
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 btn-primary btn-sm sm:btn-md px-3 sm:px-4 py-2 rounded-lg transition-all duration-200 hover:shadow-glow"
+          >
+            <span className="hidden sm:inline">Search</span>
+            <svg className="w-4 h-4 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+        </div>
+      </form>
+      
+      <SearchSuggestions 
+        suggestions={suggestions}
+        isLoading={isLoadingSuggestions}
+        showDropdown={showDropdown}
+        onSuggestionClick={handleSuggestionClick}
+        onSearch={onSearch}
+      />
+    </div>
+  );
+}
+
+export default SearchBar;
