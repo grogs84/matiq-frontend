@@ -1,16 +1,26 @@
 /* eslint-disable react/prop-types */
-import SearchBar from './SearchBar.jsx';
+import Section from './common/Section.jsx';
 
 /**
- * SearchHero component - displays the main hero section with title, stats, and search bar
+ * SearchHero component - displays the main hero section with title, stats, and flexible search content
+ * Uses composition pattern to accept any search-related content as children
  * @component
- * @param {Object} searchProps - All search-related props to pass to SearchBar
+ * @param {React.ReactNode} children - Search component(s) to render
+ * @param {Object} [stats] - Optional stats override
  * @returns {JSX.Element} The SearchHero component
  */
-function SearchHero({ searchProps }) {
+function SearchHero({ children, stats }) {
+  const defaultStats = [
+    { value: '10K+', label: 'Wrestlers' },
+    { value: '300+', label: 'Schools' },
+    { value: '50+', label: 'Tournaments' }
+  ];
+
+  const heroStats = stats || defaultStats;
+
   return (
-    <section className="pt-8 sm:pt-16 pb-12">
-      <div className="text-center max-w-4xl mx-auto">
+    <Section spacing="pt-8 sm:pt-16 pb-12" centered>
+      <div className="max-w-4xl mx-auto">
         {/* Mobile-first heading with responsive sizing */}
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-display text-neutral-900 dark:text-white mb-6 leading-tight">
           <span className="block">D1 NCAA Wrestling</span>
@@ -25,26 +35,20 @@ function SearchHero({ searchProps }) {
         
         {/* Stats row for credibility - mobile responsive */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 mb-8 sm:mb-12">
-          <div className="text-center">
-            <div className="text-2xl sm:text-3xl font-bold gradient-text">10K+</div>
-            <div className="text-sm text-neutral-600 dark:text-neutral-400">Wrestlers</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl sm:text-3xl font-bold gradient-text">300+</div>
-            <div className="text-sm text-neutral-600 dark:text-neutral-400">Schools</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl sm:text-3xl font-bold gradient-text">50+</div>
-            <div className="text-sm text-neutral-600 dark:text-neutral-400">Tournaments</div>
-          </div>
+          {heroStats.map((stat, index) => (
+            <div key={index} className="text-center">
+              <div className="text-2xl sm:text-3xl font-bold gradient-text">{stat.value}</div>
+              <div className="text-sm text-neutral-600 dark:text-neutral-400">{stat.label}</div>
+            </div>
+          ))}
         </div>
       </div>
       
-      {/* Enhanced Search Interface */}
+      {/* Enhanced Search Interface - uses children composition pattern */}
       <div className="mb-8">
-        <SearchBar {...searchProps} />
+        {children}
       </div>
-    </section>
+    </Section>
   );
 }
 
