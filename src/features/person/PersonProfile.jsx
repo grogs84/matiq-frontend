@@ -20,10 +20,10 @@ function PersonProfile() {
 
   if (loading) {
     return (
-      <div className="person-profile loading">
-        <div className="loading-container">
+      <div className="min-h-screen hero-gradient flex items-center justify-center">
+        <div className="text-center">
           <LoadingSpinner />
-          <p>Loading profile...</p>
+          <p className="mt-4 text-neutral-600 dark:text-neutral-400">Loading profile...</p>
         </div>
       </div>
     );
@@ -31,11 +31,15 @@ function PersonProfile() {
 
   if (error) {
     return (
-      <div className="person-profile error">
-        <div className="error-container">
-          <h2>Profile Not Found</h2>
-          <p>{error}</p>
-          <p>The person you&apos;re looking for might not exist or there was an error loading their profile.</p>
+      <div className="min-h-screen hero-gradient flex items-center justify-center">
+        <div className="max-w-md mx-auto text-center p-8">
+          <div className="card p-8">
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4">Profile Not Found</h2>
+            <p className="text-neutral-600 dark:text-neutral-400 mb-4">{error}</p>
+            <p className="text-neutral-500 dark:text-neutral-500 text-sm">
+              The person you're looking for might not exist or there was an error loading their profile.
+            </p>
+          </div>
         </div>
       </div>
     );
@@ -43,20 +47,22 @@ function PersonProfile() {
 
   if (!profile) {
     return (
-      <div className="person-profile error">
-        <div className="error-container">
-          <h2>Profile Not Found</h2>
-          <p>No profile data available.</p>
+      <div className="min-h-screen hero-gradient flex items-center justify-center">
+        <div className="max-w-md mx-auto text-center p-8">
+          <div className="card p-8">
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4">Profile Not Found</h2>
+            <p className="text-neutral-600 dark:text-neutral-400">No profile data available.</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="person-profile">
+    <div className="min-h-screen hero-gradient">
       <ProfileHeader profile={profile} />
       
-      <div className="person-profile-content">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <ProfileTabs
           profile={profile}
           initialTab={initialTab}

@@ -43,20 +43,31 @@ function ProfileTabs({
   ].filter(tab => tab.enabled);
 
   return (
-    <div className="profile-tabs">
-      <div className="tab-navigation">
-        {tabs.map(tab => (
-          <button
-            key={tab.id}
-            className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
-            onClick={() => setActiveTab(tab.id)}
-          >
-            {tab.label}
-          </button>
-        ))}
+    <div className="w-full">
+      {/* Tab Navigation */}
+      <div className="border-b border-neutral-200 dark:border-neutral-700 mb-8">
+        <nav className="flex space-x-8" aria-label="Profile tabs">
+          {tabs.map(tab => (
+            <button
+              key={tab.id}
+              className={`relative py-4 px-1 font-medium text-sm transition-all duration-200 ${
+                activeTab === tab.id
+                  ? 'text-primary-600 dark:text-primary-400 border-b-2 border-primary-600 dark:border-primary-400'
+                  : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:border-b-2 hover:border-neutral-300 dark:hover:border-neutral-600'
+              }`}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              {tab.label}
+              {activeTab === tab.id && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-400 dark:to-secondary-400"></div>
+              )}
+            </button>
+          ))}
+        </nav>
       </div>
       
-      <div className="tab-content">
+      {/* Tab Content */}
+      <div className="animate-fade-in">
         {tabs.find(tab => tab.id === activeTab)?.content}
       </div>
     </div>
