@@ -1,94 +1,32 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect, useRef } from 'react';
 import SearchSuggestions from './SearchSuggestions.jsx';
 
 /**
  * SearchBar component - provides search input with suggestions dropdown
+ * Now receives all state and handlers as props from parent using useSearch hook
  * @component
- * @param {Function} onSearch - Callback function for search submit
- * @param {Function} onLookAhead - Callback function for look-ahead suggestions
+ * @param {string} inputValue - Current input value
+ * @param {Array} suggestions - Array of suggestions
+ * @param {boolean} showDropdown - Whether to show suggestions dropdown
+ * @param {boolean} isLoadingSuggestions - Whether suggestions are loading
+ * @param {React.RefObject} dropdownRef - Ref for dropdown element
+ * @param {Function} handleInputChange - Input change handler
+ * @param {Function} handleSubmit - Form submit handler
+ * @param {Function} handleSuggestionClick - Suggestion click handler
+ * @param {Function} handleClear - Clear input handler
  * @returns {JSX.Element} The SearchBar component
  */
-function SearchBar({ onSearch, onLookAhead }) {
-  const [inputValue, setInputValue] = useState('');
-  const [suggestions, setSuggestions] = useState([]);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
-  const debounceTimeoutRef = useRef(null);
-  const dropdownRef = useRef(null);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const query = inputValue.trim();
-    if (query) {
-      onSearch(query);
-      setShowDropdown(false);
-    }
-  };
-
-  const handleInputChange = (e) => {
-    const value = e.target.value;
-    setInputValue(value);
-    
-    // Clear existing timeout
-    if (debounceTimeoutRef.current) {
-      clearTimeout(debounceTimeoutRef.current);
-    }
-    
-    // Clear results if input is empty
-    if (!value.trim()) {
-      onSearch('');
-      setSuggestions([]);
-      setShowDropdown(false);
-      return;
-    }
-
-    // Debounce the look-ahead search
-    debounceTimeoutRef.current = setTimeout(async () => {
-      if (value.trim().length >= 2) {
-        setIsLoadingSuggestions(true);
-        try {
-          const results = await onLookAhead(value.trim());
-          setSuggestions(results.slice(0, 5)); // Limit to 5 suggestions
-          setShowDropdown(true);
-        } catch (error) {
-          console.error('Look-ahead search failed:', error);
-          setSuggestions([]);
-        } finally {
-          setIsLoadingSuggestions(false);
-        }
-      }
-    }, 300); // 300ms debounce
-  };
-
-  const handleSuggestionClick = (suggestion) => {
-    setInputValue(suggestion.search_name || suggestion.name);
-    setShowDropdown(false);
-  };
-
-  const handleClear = () => {
-    setInputValue('');
-    setSuggestions([]);
-    setShowDropdown(false);
-    onSearch('');
-  };
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowDropdown(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      if (debounceTimeoutRef.current) {
-        clearTimeout(debounceTimeoutRef.current);
-      }
-    };
-  }, []);
+function SearchBar({ 
+  inputValue, 
+  suggestions, 
+  showDropdown, 
+  isLoadingSuggestions, 
+  dropdownRef, 
+  handleInputChange, 
+  handleSubmit, 
+  handleSuggestionClick, 
+  handleClear 
+}) {
 
   return (
     <div className="relative w-full max-w-2xl mx-auto px-4 sm:px-0" ref={dropdownRef}>
@@ -129,7 +67,6 @@ function SearchBar({ onSearch, onLookAhead }) {
         isLoading={isLoadingSuggestions}
         showDropdown={showDropdown}
         onSuggestionClick={handleSuggestionClick}
-        onSearch={onSearch}
       />
     </div>
   );

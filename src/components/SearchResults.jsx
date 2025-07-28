@@ -4,8 +4,6 @@
  * Displays search results for persons, schools, and tournaments
  */
 
-import { useNavigate } from 'react-router-dom';
-
 // Utility function to convert text to title case
 const toTitleCase = (str) => {
   if (!str) return '';
@@ -14,8 +12,7 @@ const toTitleCase = (str) => {
   });
 };
 
-function SearchResultItem({ result }) {
-  const navigate = useNavigate();
+function SearchResultItem({ result, onResultClick }) {
   const getIcon = (type) => {
     switch (type) {
       case 'person': return '🤼';
@@ -40,15 +37,8 @@ function SearchResultItem({ result }) {
   };
 
   const handleClick = () => {
-    console.log('🖱️ Clicked search result:', result); // Debug log
-    
-    // Navigate to profile page for persons
-    if (result.result_type === 'person') {
-      // Use the person_id if available, otherwise generate a dummy ID based on name
-      // const id = result.person_id || btoa(result.search_name || result.name).replace(/[^a-zA-Z0-9]/g, '').substring(0, 8);
-      const slug = result.slug;
-      console.log('🆔 Using slug for navigation:', slug); // Debug log
-      navigate(`/person/${slug}`);
+    if (onResultClick) {
+      onResultClick(result);
     }
   };
 
@@ -108,7 +98,7 @@ function SearchResultItem({ result }) {
   );
 }
 
-function SearchResults({ results, isLoading, error, query }) {
+function SearchResults({ results, isLoading, error, query, onResultClick }) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -182,7 +172,7 @@ function SearchResults({ results, isLoading, error, query }) {
             </h3>
             <div className="space-y-3">
               {groupedResults.person.map((result, index) => (
-                <SearchResultItem key={`person-${index}`} result={result} />
+                <SearchResultItem key={`person-${index}`} result={result} onResultClick={onResultClick} />
               ))}
             </div>
           </div>
@@ -197,7 +187,7 @@ function SearchResults({ results, isLoading, error, query }) {
             </h3>
             <div className="space-y-3">
               {groupedResults.school.map((result, index) => (
-                <SearchResultItem key={`school-${index}`} result={result} />
+                <SearchResultItem key={`school-${index}`} result={result} onResultClick={onResultClick} />
               ))}
             </div>
           </div>
@@ -212,7 +202,7 @@ function SearchResults({ results, isLoading, error, query }) {
             </h3>
             <div className="space-y-3">
               {groupedResults.tournament.map((result, index) => (
-                <SearchResultItem key={`tournament-${index}`} result={result} />
+                <SearchResultItem key={`tournament-${index}`} result={result} onResultClick={onResultClick} />
               ))}
             </div>
           </div>
