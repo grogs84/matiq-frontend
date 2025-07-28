@@ -1,104 +1,23 @@
 /* eslint-disable react/prop-types */
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import apiService from '../services/api.js';
+import useProfile from '../hooks/useProfile.js';
 
 function ProfilePage() {
-//   const { id } = useParams();
   const { slug } = useParams();
   const navigate = useNavigate();
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const loadProfile = async () => {
-      try {
-        setLoading(true);
-        
-        // Determine entity type from URL path
-        const currentPath = window.location.pathname;
-        let entityType = 'person'; // default
-        let apiEndpoint = `/person/${slug}`;
-        
-        if (currentPath.includes('/school/')) {
-          entityType = 'school';
-          apiEndpoint = `/school/${slug}`;
-        } else if (currentPath.includes('/tournament/')) {
-          entityType = 'tournament';
-          apiEndpoint = `/tournament/${slug}`;
-        }
-        
-        // Try to fetch real profile data first
-        try {
-          console.log(`🔍 Fetching ${entityType} data from:`, apiEndpoint);
-          const profileData = await apiService.get(apiEndpoint);
-          setProfile({
-            ...profileData,
-            entityType: entityType,
-            // Add additional dummy data for demo purposes
-            roles: entityType === 'person' ? ['Wrestler'] : [],
-            achievements: [
-              entityType === 'person' ? 'NCAA Division I Champion (2023)' : 
-              entityType === 'school' ? 'Top Wrestling Program' :
-              'Major Championship Tournament',
-              'Excellence in Competition',
-              'Outstanding Performance'
-            ],
-            stats: entityType === 'person' ? {
-              career_wins: 156,
-              career_losses: 23,
-              pins: 45,
-              tech_falls: 12,
-              major_decisions: 28
-            } : {}
-          });
-        } catch (apiError) {
-          // Fallback to dummy data if API fails
-          console.log('API failed, using dummy data:', apiError);
-          setProfile({
-            slug: slug,
-            entityType: entityType,
-            first_name: entityType === 'person' ? 'Demo' : undefined,
-            last_name: entityType === 'person' ? 'Person' : undefined,
-            search_name: entityType === 'person' ? `Demo Person ${slug}` : 
-                        entityType === 'school' ? `Demo School ${slug}` :
-                        `Demo Tournament ${slug}`,
-            name: entityType !== 'person' ? `Demo ${entityType} ${slug}` : undefined,
-            state_of_origin: entityType === 'person' ? 'PA' : undefined,
-            location: entityType !== 'person' ? 'Demo Location' : undefined,
-            roles: entityType === 'person' ? ['Wrestler', 'Coach'] : [],
-            school: entityType === 'person' ? 'Penn State University' : undefined,
-            weight_class: entityType === 'person' ? '184 lbs' : undefined,
-            wins: entityType === 'person' ? 42 : undefined,
-            losses: entityType === 'person' ? 8 : undefined,
-            bio: `This is a dummy ${entityType} page for slug: ${slug}. In a real application, this would fetch actual data from the API.`,
-            achievements: [
-              entityType === 'person' ? 'NCAA Division I Champion (2023)' :
-              entityType === 'school' ? 'Top Wrestling Program' :
-              'Major Championship Tournament',
-              'Excellence in Competition',
-              'Outstanding Performance'
-            ],
-            stats: entityType === 'person' ? {
-              career_wins: 156,
-              career_losses: 23,
-              pins: 45,
-              tech_falls: 12,
-              major_decisions: 28
-            } : {}
-          });
-        }
-      } catch (err) {
-        console.error('Profile loading failed:', err);
-        setError('Failed to load profile');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadProfile();
-  }, [slug]); // Changed from [id] to [slug]
+  
+  // Determine entity type from URL path
+  const currentPath = window.location.pathname;
+  let entityType = 'person'; // default
+  
+  if (currentPath.includes('/school/')) {
+    entityType = 'school';
+  } else if (currentPath.includes('/tournament/')) {
+    entityType = 'tournament';
+  }
+  
+  // Use profile hook instead of manual state management
+  const { profile, loading, error } = useProfile(slug, entityType);
 
   if (loading) {
     return (
