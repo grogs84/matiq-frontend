@@ -2,9 +2,9 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useWrestlerMatches from '../hooks/useWrestlerMatches.js';
-import LoadingSpinner from '../../../components/common/LoadingSpinner.jsx';
-import Button from '../../../components/ui/Button.jsx';
-import { toTitleCase } from '../../../utils/textUtils.js';
+import { LoadingSpinner } from '../../../components/common';
+import { Button } from '../../../components/ui';
+import { toTitleCase } from '../../../utils';
 
 /**
  * Matches tab showing wrestler match history with pagination

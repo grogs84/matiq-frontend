@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { toTitleCase, formatLocation } from '../../../utils/textUtils.js';
-import Badge from '../../../components/ui/Badge.jsx';
+import { toTitleCase, formatLocation } from '../../../utils';
+import { Badge } from '../../../components/ui';
 
 /**
  * Profile header component displaying person's name, image, and basic info

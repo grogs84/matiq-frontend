@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import apiService from '../../../services/api.js';
+import { apiService } from '../../../services';
 
 /**
  * Enhanced search hook that manages all search-related state and functionality

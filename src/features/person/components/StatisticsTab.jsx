@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useMemo } from 'react';
 import useWrestlerStats from '../hooks/useWrestlerStats.js';
-import LoadingSpinner from '../../../components/common/LoadingSpinner.jsx';
+import { LoadingSpinner } from '../../../components/common';
 
 /**
  * Statistics tab showing wrestler yearly performance data

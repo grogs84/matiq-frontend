@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { toTitleCase } from '../../../utils/textUtils.js';
+import { toTitleCase } from '../../../utils';
 
 /**
  * Overview tab showing basic person information
