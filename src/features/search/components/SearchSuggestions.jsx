@@ -37,11 +37,18 @@ function SearchSuggestions({ suggestions, isLoading, showDropdown, onSuggestionC
               className="px-4 py-3 hover:bg-neutral-50/80 dark:hover:bg-neutral-700/50 cursor-pointer border-b border-neutral-100/50 dark:border-neutral-700/50 last:border-b-0 transition-all duration-200 group"
               onClick={() => onSuggestionClick(suggestion)}
             >
-              <div className="flex items-center justify-between">
-                <span className="text-neutral-800 dark:text-neutral-200 font-medium group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200">
-                  {toTitleCase(suggestion.search_name || suggestion.name)}
-                </span>
-                <div className="flex flex-wrap gap-1">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="text-left text-neutral-800 dark:text-neutral-200 font-medium group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200">
+                    {toTitleCase(suggestion.search_name || suggestion.name)}
+                  </div>
+                  {suggestion.metadata && (
+                    <div className="text-left text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+                      {toTitleCase(suggestion.metadata)}
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-wrap gap-1 ml-3">
                   {suggestion.result_type === 'person' ? (
                     suggestion.roles && suggestion.roles.length > 0 ? (
                       suggestion.roles.map((role, roleIndex) => (
