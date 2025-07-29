@@ -1,16 +1,12 @@
 /* eslint-disable react/prop-types */
+import Button from './ui/Button.jsx';
+import Badge from './ui/Badge.jsx';
+import { toTitleCase } from '../utils/textUtils.js';
+
 /**
  * SearchResults Component
  * Displays search results for persons, schools, and tournaments
  */
-
-// Utility function to convert text to title case
-const toTitleCase = (str) => {
-  if (!str) return '';
-  return str.replace(/\w\S*/g, (txt) => {
-    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-  });
-};
 
 function SearchResultItem({ result, onResultClick }) {
   const getIcon = (type) => {
@@ -64,17 +60,17 @@ function SearchResultItem({ result, onResultClick }) {
               {result.result_type === 'person' ? (
                 result.roles && result.roles.length > 0 ? (
                   result.roles.map((role, roleIndex) => (
-                    <span key={roleIndex} className="badge-primary whitespace-nowrap">
+                    <Badge key={roleIndex} variant="primary" className="whitespace-nowrap">
                       {toTitleCase(role)}
-                    </span>
+                    </Badge>
                   ))
                 ) : (
-                  <span className="badge-primary">Person</span>
+                  <Badge variant="primary">Person</Badge>
                 )
               ) : (
-                <span className="badge-secondary whitespace-nowrap">
+                <Badge variant="secondary" className="whitespace-nowrap">
                   {getTypeLabel(result.result_type, result)}
-                </span>
+                </Badge>
               )}
             </div>
           </div>
@@ -116,12 +112,13 @@ function SearchResults({ results, isLoading, error, query, onResultClick }) {
         <div className="text-error-600 dark:text-error-400 text-4xl mb-4">⚠️</div>
         <h3 className="text-lg font-semibold text-error-800 dark:text-error-300 mb-2">Search failed</h3>
         <p className="text-error-700 dark:text-error-400 mb-4">{error.message}</p>
-        <button 
-          className="btn-accent btn-md"
+        <Button 
+          variant="accent"
+          size="md"
           onClick={() => window.location.reload()}
         >
           Try Again
-        </button>
+        </Button>
       </div>
     );
   }
@@ -168,7 +165,7 @@ function SearchResults({ results, isLoading, error, query, onResultClick }) {
           <div className="animate-slide-up">
             <h3 className="text-lg sm:text-xl font-semibold text-neutral-900 dark:text-white mb-4 flex items-center">
               <span className="mr-2 text-xl sm:text-2xl">🤼</span>
-              Wrestlers <span className="badge-primary ml-2">{groupedResults.person.length}</span>
+              Wrestlers <Badge variant="primary" className="ml-2">{groupedResults.person.length}</Badge>
             </h3>
             <div className="space-y-3">
               {groupedResults.person.map((result, index) => (
@@ -183,7 +180,7 @@ function SearchResults({ results, isLoading, error, query, onResultClick }) {
           <div className="animate-slide-up" style={{ animationDelay: '100ms' }}>
             <h3 className="text-lg sm:text-xl font-semibold text-neutral-900 dark:text-white mb-4 flex items-center">
               <span className="mr-2 text-xl sm:text-2xl">🏫</span>
-              Schools <span className="badge-primary ml-2">{groupedResults.school.length}</span>
+              Schools <Badge variant="primary" className="ml-2">{groupedResults.school.length}</Badge>
             </h3>
             <div className="space-y-3">
               {groupedResults.school.map((result, index) => (
@@ -198,7 +195,7 @@ function SearchResults({ results, isLoading, error, query, onResultClick }) {
           <div className="animate-slide-up" style={{ animationDelay: '200ms' }}>
             <h3 className="text-lg sm:text-xl font-semibold text-neutral-900 dark:text-white mb-4 flex items-center">
               <span className="mr-2 text-xl sm:text-2xl">🏆</span>
-              Tournaments <span className="badge-primary ml-2">{groupedResults.tournament.length}</span>
+              Tournaments <Badge variant="primary" className="ml-2">{groupedResults.tournament.length}</Badge>
             </h3>
             <div className="space-y-3">
               {groupedResults.tournament.map((result, index) => (

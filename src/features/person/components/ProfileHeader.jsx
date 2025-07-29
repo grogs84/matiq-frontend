@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { toTitleCase, formatLocation } from '../../../utils/textUtils.js';
+import Badge from '../../../components/ui/Badge.jsx';
 
 /**
  * Profile header component displaying person's name, image, and basic info
@@ -46,23 +47,33 @@ function ProfileHeader({ profile }) {
             </h1>
             
             {/* Badges */}
-            <div className="flex flex-wrap justify-center md:justify-start gap-3 mb-6">
-              <span className="badge bg-white/20 text-white border border-white/30 backdrop-blur-sm">
+            <Badge.Group className="flex flex-wrap justify-center md:justify-start mb-6">
+              <Badge 
+                variant="secondary" 
+                className="bg-white/20 text-white border border-white/30 backdrop-blur-sm"
+              >
                 Person
-              </span>
+              </Badge>
               {isWrestler && (
-                <span className="badge bg-ncaa-gold/90 text-ncaa-navy border border-ncaa-gold/50 backdrop-blur-sm">
+                <Badge 
+                  variant="warning" 
+                  className="bg-ncaa-gold/90 text-ncaa-navy border border-ncaa-gold/50 backdrop-blur-sm"
+                >
                   Wrestler
-                </span>
+                </Badge>
               )}
               {profile.roles?.map((role, index) => (
                 role.role_type !== 'wrestler' && (
-                  <span key={index} className="badge bg-ncaa-orange/80 text-white border border-ncaa-orange/50 backdrop-blur-sm">
+                  <Badge 
+                    key={index} 
+                    variant="error" 
+                    className="bg-ncaa-orange/80 text-white border border-ncaa-orange/50 backdrop-blur-sm"
+                  >
                     {toTitleCase(role.role_type)}
-                  </span>
+                  </Badge>
                 )
               ))}
-            </div>
+            </Badge.Group>
 
             {/* Location */}
             {(profile.city_of_origin || profile.state_of_origin) && (
