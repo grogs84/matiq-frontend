@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useMemo } from 'react';
 import useWrestlerStats from '../hooks/useWrestlerStats.js';
-import LoadingSpinner from '../../../components/common/LoadingSpinner.jsx';
+import { LoadingSpinner } from '../../../components/common';
 
 /**
  * Statistics tab showing wrestler yearly performance data
@@ -56,7 +56,7 @@ function StatisticsTab({ slug }) {
     return (
       <div className="card p-8 text-center">
         <h3 className="text-lg font-semibold text-neutral-600 dark:text-neutral-400 mb-2">No Statistics Available</h3>
-        <p className="text-neutral-500 dark:text-neutral-500">This wrestler doesn't have any recorded statistics yet.</p>
+        <p className="text-neutral-500 dark:text-neutral-500">This wrestler doesn&rsquo;t have any recorded statistics yet.</p>
       </div>
     );
   }

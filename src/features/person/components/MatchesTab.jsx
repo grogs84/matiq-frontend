@@ -2,8 +2,9 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useWrestlerMatches from '../hooks/useWrestlerMatches.js';
-import LoadingSpinner from '../../../components/common/LoadingSpinner.jsx';
-import { toTitleCase } from '../../../utils/textUtils.js';
+import { LoadingSpinner } from '../../../components/common';
+import { Button } from '../../../components/ui';
+import { toTitleCase } from '../../../utils';
 
 /**
  * Matches tab showing wrestler match history with pagination
@@ -198,31 +199,38 @@ function MatchesTab({ slug }) {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between border-t border-neutral-200 dark:border-neutral-700 pt-6">
-          <button 
-            className="btn-secondary btn-sm flex items-center gap-2"
+          <Button
             onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
             disabled={currentPage === 1}
+            variant="secondary"
+            size="sm"
+            icon={
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+            }
           >
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
             Previous
-          </button>
+          </Button>
           
           <div className="text-sm text-neutral-600 dark:text-neutral-400">
             Page <span className="font-medium">{currentPage}</span> of <span className="font-medium">{totalPages}</span>
           </div>
           
-          <button 
-            className="btn-secondary btn-sm flex items-center gap-2"
+          <Button
             onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
             disabled={currentPage === totalPages}
+            variant="secondary"
+            size="sm"
+            icon={
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+              </svg>
+            }
+            iconPosition="right"
           >
             Next
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-            </svg>
-          </button>
+          </Button>
         </div>
       )}
     </div>

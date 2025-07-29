@@ -6,7 +6,7 @@ import ProfileTabs from './components/ProfileTabs.jsx';
 import OverviewTab from './components/OverviewTab.jsx';
 import StatisticsTab from './components/StatisticsTab.jsx';
 import MatchesTab from './components/MatchesTab.jsx';
-import LoadingSpinner from '../../components/common/LoadingSpinner.jsx';
+import { LoadingSpinner } from '../../components/common';
 
 /**
  * Main person profile page component
@@ -37,7 +37,7 @@ function PersonProfile() {
             <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4">Profile Not Found</h2>
             <p className="text-neutral-600 dark:text-neutral-400 mb-4">{error}</p>
             <p className="text-neutral-500 dark:text-neutral-500 text-sm">
-              The person you're looking for might not exist or there was an error loading their profile.
+              The person you&rsquo;re looking for might not exist or there was an error loading their profile.
             </p>
           </div>
         </div>

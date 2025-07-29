@@ -1,21 +1,13 @@
 /* eslint-disable react/prop-types */
+import { Button, Badge } from '../../../components/ui';
+import { toTitleCase } from '../../../utils';
+
 /**
  * SearchResults Component
  * Displays search results for persons, schools, and tournaments
  */
 
-import { useNavigate } from 'react-router-dom';
-
-// Utility function to convert text to title case
-const toTitleCase = (str) => {
-  if (!str) return '';
-  return str.replace(/\w\S*/g, (txt) => {
-    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-  });
-};
-
-function SearchResultItem({ result }) {
-  const navigate = useNavigate();
+function SearchResultItem({ result, onResultClick }) {
   const getIcon = (type) => {
     switch (type) {
       case 'person': return '🤼';
@@ -40,15 +32,8 @@ function SearchResultItem({ result }) {
   };
 
   const handleClick = () => {
-    console.log('🖱️ Clicked search result:', result); // Debug log
-    
-    // Navigate to profile page for persons
-    if (result.result_type === 'person') {
-      // Use the person_id if available, otherwise generate a dummy ID based on name
-      // const id = result.person_id || btoa(result.search_name || result.name).replace(/[^a-zA-Z0-9]/g, '').substring(0, 8);
-      const slug = result.slug;
-      console.log('🆔 Using slug for navigation:', slug); // Debug log
-      navigate(`/person/${slug}`);
+    if (onResultClick) {
+      onResultClick(result);
     }
   };
 
@@ -74,17 +59,17 @@ function SearchResultItem({ result }) {
               {result.result_type === 'person' ? (
                 result.roles && result.roles.length > 0 ? (
                   result.roles.map((role, roleIndex) => (
-                    <span key={roleIndex} className="badge-primary whitespace-nowrap">
+                    <Badge key={roleIndex} variant="primary" className="whitespace-nowrap">
                       {toTitleCase(role)}
-                    </span>
+                    </Badge>
                   ))
                 ) : (
-                  <span className="badge-primary">Person</span>
+                  <Badge variant="primary">Person</Badge>
                 )
               ) : (
-                <span className="badge-secondary whitespace-nowrap">
+                <Badge variant="secondary" className="whitespace-nowrap">
                   {getTypeLabel(result.result_type, result)}
-                </span>
+                </Badge>
               )}
             </div>
           </div>
@@ -108,7 +93,7 @@ function SearchResultItem({ result }) {
   );
 }
 
-function SearchResults({ results, isLoading, error, query }) {
+function SearchResults({ results, isLoading, error, query, onResultClick }) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -126,12 +111,13 @@ function SearchResults({ results, isLoading, error, query }) {
         <div className="text-error-600 dark:text-error-400 text-4xl mb-4">⚠️</div>
         <h3 className="text-lg font-semibold text-error-800 dark:text-error-300 mb-2">Search failed</h3>
         <p className="text-error-700 dark:text-error-400 mb-4">{error.message}</p>
-        <button 
-          className="btn-accent btn-md"
+        <Button 
+          variant="accent"
+          size="md"
           onClick={() => window.location.reload()}
         >
           Try Again
-        </button>
+        </Button>
       </div>
     );
   }
@@ -147,7 +133,7 @@ function SearchResults({ results, isLoading, error, query }) {
       <div className="card p-8 text-center">
         <div className="text-neutral-400 dark:text-neutral-500 text-4xl mb-4">🔍</div>
         <h3 className="text-xl font-semibold text-neutral-800 dark:text-neutral-200 mb-2">No results found</h3>
-        <p className="text-neutral-600 dark:text-neutral-400 mb-2">No matches found for "{query || searchQuery}"</p>
+        <p className="text-neutral-600 dark:text-neutral-400 mb-2">No matches found for &ldquo;{query || searchQuery}&rdquo;</p>
         <p className="text-neutral-500 dark:text-neutral-500 text-sm">Try searching with different keywords or check your spelling.</p>
       </div>
     );
@@ -168,7 +154,7 @@ function SearchResults({ results, isLoading, error, query }) {
       <div className="card p-4 sm:p-6">
         <h2 className="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white mb-2">Search Results</h2>
         <p className="text-neutral-600 dark:text-neutral-400">
-          Found <span className="font-semibold text-primary-600 dark:text-primary-400">{total_results}</span> result{total_results !== 1 ? 's' : ''} for "{toTitleCase(query || searchQuery)}"
+          Found <span className="font-semibold text-primary-600 dark:text-primary-400">{total_results}</span> result{total_results !== 1 ? 's' : ''} for &ldquo;{toTitleCase(query || searchQuery)}&rdquo;
         </p>
       </div>
 
@@ -178,11 +164,11 @@ function SearchResults({ results, isLoading, error, query }) {
           <div className="animate-slide-up">
             <h3 className="text-lg sm:text-xl font-semibold text-neutral-900 dark:text-white mb-4 flex items-center">
               <span className="mr-2 text-xl sm:text-2xl">🤼</span>
-              Wrestlers <span className="badge-primary ml-2">{groupedResults.person.length}</span>
+              Wrestlers <Badge variant="primary" className="ml-2">{groupedResults.person.length}</Badge>
             </h3>
             <div className="space-y-3">
               {groupedResults.person.map((result, index) => (
-                <SearchResultItem key={`person-${index}`} result={result} />
+                <SearchResultItem key={`person-${index}`} result={result} onResultClick={onResultClick} />
               ))}
             </div>
           </div>
@@ -193,11 +179,11 @@ function SearchResults({ results, isLoading, error, query }) {
           <div className="animate-slide-up" style={{ animationDelay: '100ms' }}>
             <h3 className="text-lg sm:text-xl font-semibold text-neutral-900 dark:text-white mb-4 flex items-center">
               <span className="mr-2 text-xl sm:text-2xl">🏫</span>
-              Schools <span className="badge-primary ml-2">{groupedResults.school.length}</span>
+              Schools <Badge variant="primary" className="ml-2">{groupedResults.school.length}</Badge>
             </h3>
             <div className="space-y-3">
               {groupedResults.school.map((result, index) => (
-                <SearchResultItem key={`school-${index}`} result={result} />
+                <SearchResultItem key={`school-${index}`} result={result} onResultClick={onResultClick} />
               ))}
             </div>
           </div>
@@ -208,11 +194,11 @@ function SearchResults({ results, isLoading, error, query }) {
           <div className="animate-slide-up" style={{ animationDelay: '200ms' }}>
             <h3 className="text-lg sm:text-xl font-semibold text-neutral-900 dark:text-white mb-4 flex items-center">
               <span className="mr-2 text-xl sm:text-2xl">🏆</span>
-              Tournaments <span className="badge-primary ml-2">{groupedResults.tournament.length}</span>
+              Tournaments <Badge variant="primary" className="ml-2">{groupedResults.tournament.length}</Badge>
             </h3>
             <div className="space-y-3">
               {groupedResults.tournament.map((result, index) => (
-                <SearchResultItem key={`tournament-${index}`} result={result} />
+                <SearchResultItem key={`tournament-${index}`} result={result} onResultClick={onResultClick} />
               ))}
             </div>
           </div>

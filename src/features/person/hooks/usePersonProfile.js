@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import apiService from '../../../services/api.js';
+import { apiService } from '../../../services';
 
 /**
  * Hook to fetch person profile data
