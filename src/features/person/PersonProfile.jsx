@@ -6,7 +6,7 @@ import ProfileTabs from './components/ProfileTabs.jsx';
 import OverviewTab from './components/OverviewTab.jsx';
 import StatisticsTab from './components/StatisticsTab.jsx';
 import MatchesTab from './components/MatchesTab.jsx';
-import LoadingSpinner from '../../components/common/LoadingSpinner.jsx';
+import { LoadingSpinner } from '../../components/common';
 
 /**
  * Main person profile page component

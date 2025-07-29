@@ -1,4 +1,4 @@
-import useHealthCheck from '../hooks/useHealthCheck.js';
+import { useHealthCheck } from '../hooks';
 
 /**
  * HealthCheck component - displays system health status with a floating button

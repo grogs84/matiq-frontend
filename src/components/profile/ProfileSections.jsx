@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import Card from '../ui/Card.jsx';
+import { Card } from '../ui';
 
 /**
  * ProfileHeader component - displays profile header information

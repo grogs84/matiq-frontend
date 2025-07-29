@@ -1,10 +1,7 @@
-import SearchResults from './SearchResults.jsx';
-import SearchHero from './SearchHero.jsx';
-import SearchBar from './SearchBar.jsx';
+import { SearchResults, SearchHero, SearchBar, useSearch } from '../features/search';
 import BrowseCards from './BrowseCards.jsx';
 import HealthCheck from './HealthCheck.jsx';
-import Layout from './common/Layout.jsx';
-import useSearch from '../hooks/useSearch.js';
+import { Layout } from '../components/common';
 
 /**
  * HomePage component - main landing page with search functionality

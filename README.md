@@ -18,6 +18,47 @@ A comprehensive React application for exploring NCAA D1 Wrestling Championship d
 - **API Client:** Custom fetch-based service with mock data fallback
 - **Development:** ESLint, PostCSS, Autoprefixer
 
+## Project Structure
+
+The project follows a feature-based architecture for better maintainability and scalability:
+
+```
+src/
+├── components/           # Shared/global components
+│   ├── common/          # Common components (Layout, LoadingSpinner, etc.)
+│   ├── ui/              # UI component library (Button, Card, etc.)
+│   └── ...              # Route-level components (HomePage, ProfilePage)
+├── features/            # Feature-based modules
+│   ├── person/          # Person/wrestler related functionality
+│   │   ├── components/  # Person-specific components
+│   │   ├── hooks/       # Person-specific hooks
+│   │   ├── services/    # Person-specific services
+│   │   ├── types/       # Type definitions
+│   │   └── index.js     # Barrel export
+│   ├── search/          # Search functionality
+│   │   ├── components/  # Search components (SearchBar, SearchResults, etc.)
+│   │   ├── hooks/       # Search hooks (useSearch)
+│   │   └── index.js     # Barrel export
+│   └── items/           # Items feature
+├── hooks/               # Global hooks
+├── services/            # Global services (API client)
+├── utils/               # Utility functions
+└── config.js            # Application configuration
+```
+
+### Barrel Exports
+
+Each feature and shared module uses barrel exports (`index.js`) for clean imports:
+
+```javascript
+// Instead of:
+import SearchBar from '../features/search/components/SearchBar.jsx';
+import SearchResults from '../features/search/components/SearchResults.jsx';
+
+// Use:
+import { SearchBar, SearchResults } from '../features/search';
+```
+
 ## API Architecture
 
 The application uses a custom API service layer with React hooks for data fetching:

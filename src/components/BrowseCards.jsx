@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
-import Card from './ui/Card.jsx';
-import Button from './ui/Button.jsx';
-import Section from './common/Section.jsx';
+import { Card, Button } from './ui';
+import { Section } from './common';
 
 /**
  * BrowseCards component - displays browseable categories when no search results are shown

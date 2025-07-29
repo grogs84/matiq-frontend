@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import Section from './common/Section.jsx';
+import { Section } from '../../../components/common';
 
 /**
  * SearchHero component - displays the main hero section with title, stats, and flexible search content

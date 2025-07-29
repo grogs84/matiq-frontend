@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useParams, useNavigate } from 'react-router-dom';
-import useProfile from '../hooks/useProfile.js';
+import { useProfile } from '../hooks';
 import Layout from './common/Layout.jsx';
 import Section from './common/Section.jsx';
 import StateRenderer from './common/StateRenderer.jsx';
