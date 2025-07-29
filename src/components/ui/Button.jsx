@@ -33,22 +33,22 @@ const Button = forwardRef(function Button({
   ...props
 }, ref) {
   // Base button classes
-  const baseClasses = 'btn inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+  const baseClasses = 'inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
   
   // Variant classes
   const variantClasses = {
-    primary: 'btn-primary',
-    secondary: 'btn-secondary', 
-    accent: 'btn-accent',
+    primary: 'bg-primary-600 hover:bg-primary-700 text-white shadow-lg hover:shadow-xl focus:ring-primary-500 dark:bg-primary-500 dark:hover:bg-primary-600',
+    secondary: 'bg-white hover:bg-neutral-50 text-neutral-900 border border-neutral-300 hover:border-neutral-400 focus:ring-primary-500 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-white dark:border-neutral-600',
+    accent: 'bg-accent-500 hover:bg-accent-600 text-white shadow-lg hover:shadow-xl focus:ring-accent-500',
     outline: 'border-2 border-primary-600 text-primary-600 hover:bg-primary-600 hover:text-white dark:border-primary-400 dark:text-primary-400 dark:hover:bg-primary-400 dark:hover:text-white',
     ghost: 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-neutral-800'
   };
   
   // Size classes
   const sizeClasses = {
-    sm: 'btn-sm',
-    md: 'btn-md', 
-    lg: 'btn-lg'
+    sm: 'px-3 py-1.5 text-sm rounded-md',
+    md: 'px-4 py-2 text-sm rounded-lg',
+    lg: 'px-6 py-3 text-base rounded-xl'
   };
   
   // Width classes

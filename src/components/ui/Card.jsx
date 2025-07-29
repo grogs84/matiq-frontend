@@ -21,7 +21,7 @@ function Card({
   padding = 'p-6'
 }) {
   const baseClasses = 'card';
-  const hoverClasses = hover ? 'card-hover group cursor-pointer transform transition-all duration-300 hover:scale-105' : '';
+  const hoverClasses = hover ? 'hover:shadow-md hover:border-neutral-300 dark:hover:border-neutral-600 hover:-translate-y-0.5 group cursor-pointer transform transition-all duration-300 hover:scale-105' : '';
   const clickableClasses = clickable ? 'cursor-pointer' : '';
   
   const combinedClasses = `${baseClasses} ${hoverClasses} ${clickableClasses} ${padding} ${className}`;
