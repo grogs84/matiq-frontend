@@ -1,7 +1,9 @@
 import SearchResults from './SearchResults.jsx';
 import SearchHero from './SearchHero.jsx';
+import SearchBar from './SearchBar.jsx';
 import BrowseCards from './BrowseCards.jsx';
 import HealthCheck from './HealthCheck.jsx';
+import Layout from './common/Layout.jsx';
 import useSearch from '../hooks/useSearch.js';
 
 /**
@@ -50,31 +52,31 @@ function HomePage() {
   };
 
   return (
-    <div className="min-h-screen hero-gradient">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Hero Section with Search */}
-        <SearchHero searchProps={searchProps} />
+    <Layout background="gradient">
+      {/* Hero Section with Search - using children composition pattern */}
+      <SearchHero>
+        <SearchBar {...searchProps} />
+      </SearchHero>
 
-        {/* Search Results */}
-        {showResults && (
-          <section className="pb-12">
-            <SearchResults 
-              results={searchResults}
-              isLoading={isSearching}
-              error={searchError}
-              query={currentQuery}
-              onResultClick={handleResultClick}
-            />
-          </section>
-        )}
+      {/* Search Results */}
+      {showResults && (
+        <section className="pb-12">
+          <SearchResults 
+            results={searchResults}
+            isLoading={isSearching}
+            error={searchError}
+            query={currentQuery}
+            onResultClick={handleResultClick}
+          />
+        </section>
+      )}
 
-        {/* Browse Cards - shown when no search results */}
-        <BrowseCards showResults={showResults} />
+      {/* Browse Cards - shown when no search results */}
+      <BrowseCards showResults={showResults} />
 
-        {/* Health Check */}
-        <HealthCheck />
-      </div>
-    </div>
+      {/* Health Check */}
+      <HealthCheck />
+    </Layout>
   );
 }
 

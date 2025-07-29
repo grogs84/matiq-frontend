@@ -1,6 +1,10 @@
 /* eslint-disable react/prop-types */
+import Card from './ui/Card.jsx';
+import Section from './common/Section.jsx';
+
 /**
  * BrowseCards component - displays browseable categories when no search results are shown
+ * Uses composition patterns with Card and Section components
  * @component
  * @param {boolean} showResults - Whether search results are currently displayed
  * @returns {JSX.Element|null} The BrowseCards component or null if results are shown
@@ -38,23 +42,18 @@ function BrowseCards({ showResults }) {
   }
 
   return (
-    <section className="pb-16">
-      <div className="text-center mb-8 sm:mb-12">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-neutral-900 dark:text-white mb-4">
-          Explore Wrestling Data
-        </h2>
-        <p className="text-base sm:text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto px-4">
+    <Section centered>
+      <Section.Header>
+        <Section.Title>Explore Wrestling Data</Section.Title>
+        <Section.Description>
           Discover comprehensive wrestling information across multiple categories
-        </p>
-      </div>
+        </Section.Description>
+      </Section.Header>
       
       {/* Enhanced grid with better mobile spacing */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {browseCards.map((card, index) => (
-          <div 
-            key={index} 
-            className="card-hover p-6 group cursor-pointer transform transition-all duration-300 hover:scale-105"
-          >
+          <Card key={index} hover>
             <div className="text-center">
               <div className="text-4xl sm:text-5xl mb-4 transition-transform duration-300 group-hover:scale-110 group-hover:animate-bounce-subtle">
                 {card.icon}
@@ -72,10 +71,10 @@ function BrowseCards({ showResults }) {
                 </svg>
               </button>
             </div>
-          </div>
+          </Card>
         ))}
       </div>
-    </section>
+    </Section>
   );
 }
 
