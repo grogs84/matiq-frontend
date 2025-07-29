@@ -47,13 +47,10 @@ function ProfileHeader({ profile }) {
             </h1>
             
             {/* Badges */}
-            <Badge.Group className="flex flex-wrap justify-center md:justify-start mb-6">
-              <Badge 
-                variant="secondary" 
-                className="bg-white/20 text-white border border-white/30 backdrop-blur-sm"
-              >
+            <div className="flex flex-wrap justify-center md:justify-start gap-3 mb-6">
+              {/* <span className="badge bg-white/20 text-white border border-white/30 backdrop-blur-sm">
                 Person
-              </Badge>
+              </span> */}
               {isWrestler && (
                 <Badge 
                   variant="warning" 
