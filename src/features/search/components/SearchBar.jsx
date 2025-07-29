@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import SearchSuggestions from './SearchSuggestions.jsx';
-import Button from './ui/Button.jsx';
+import Button from '../../../components/ui/Button.jsx';
 
 /**
  * SearchBar component - provides search input with suggestions dropdown

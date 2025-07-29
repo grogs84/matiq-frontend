@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import Button from './ui/Button.jsx';
-import Badge from './ui/Badge.jsx';
-import { toTitleCase } from '../utils/textUtils.js';
+import Button from '../../../components/ui/Button.jsx';
+import Badge from '../../../components/ui/Badge.jsx';
+import { toTitleCase } from '../../../utils/textUtils.js';
 
 /**
  * SearchResults Component
