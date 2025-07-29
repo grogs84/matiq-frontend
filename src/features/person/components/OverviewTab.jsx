@@ -39,8 +39,15 @@ function OverviewTab({ profile }) {
             <span className="block text-neutral-900 dark:text-white">{toTitleCase(profile.last_name) || 'Not specified'}</span>
           </div>
           <div className="space-y-1">
-            <label className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Search Name</label>
-            <span className="block text-neutral-900 dark:text-white">{toTitleCase(profile.search_name) || 'Not specified'}</span>
+            <label className="text-sm font-medium text-neutral-500 dark:text-neutral-400">School</label>
+            <span className="block text-neutral-900 dark:text-white">
+              {profile.schools && profile.schools.length > 0 
+                ? profile.schools.map(school => toTitleCase(school.name)).join(', ')
+                : profile.school 
+                ? toTitleCase(profile.school)
+                : 'Not specified'
+              }
+            </span>
           </div>
           <div className="space-y-1">
             <label className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Date of Birth</label>

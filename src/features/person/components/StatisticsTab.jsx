@@ -2,6 +2,7 @@
 import { useState, useMemo } from 'react';
 import useWrestlerStats from '../hooks/useWrestlerStats.js';
 import { LoadingSpinner } from '../../../components/common';
+import { toTitleCase } from '../../../utils/textUtils.js';
 
 /**
  * Statistics tab showing wrestler yearly performance data
@@ -127,6 +128,7 @@ function StatisticsTab({ slug }) {
             <thead className="bg-neutral-50 dark:bg-neutral-800">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Year</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">School</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Weight Class</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Wins</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Placement</th>
@@ -137,6 +139,9 @@ function StatisticsTab({ slug }) {
                 <tr key={`${stat.year}-${stat.weight_class}-${index}`} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-900 dark:text-white">
                     {stat.year}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-600 dark:text-neutral-400">
+                    {stat.school ? toTitleCase(stat.school) : 'N/A'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-600 dark:text-neutral-400">
                     {stat.weight_class}
