@@ -70,7 +70,7 @@ function ProfileHeader({ profile }) {
                   </Badge>
                 )
               ))}
-            </Badge.Group>
+            </div>
 
             {/* Location */}
             {(profile.city_of_origin || profile.state_of_origin) && (
