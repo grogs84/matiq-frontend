@@ -13,7 +13,7 @@ function SearchHero({ children, stats }) {
   const defaultStats = [
     { value: '10K+', label: 'Wrestlers' },
     { value: '300+', label: 'Schools' },
-    { value: '50+', label: 'Tournaments' }
+    { value: '90+', label: 'Tournaments' }
   ];
 
   const heroStats = stats || defaultStats;
