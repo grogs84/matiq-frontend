@@ -18,7 +18,11 @@ export const transformTournamentData = (matiqData) => {
   
   if (isDoubleElimination) {
     // Transform to double elimination format with upper and lower brackets
-    return transformToDoubleEliminationFormat(matiqData);
+    const { upper, lower } = transformToDoubleEliminationFormat(matiqData);
+    return {
+      upper: upper,
+      lower: lower
+    };
   }
 
   // Return matches directly for single elimination as the library expects an array of matches
@@ -59,33 +63,69 @@ export const isDoubleEliminationTournament = (tournamentData) => {
 /**
  * Transform matches to double elimination format
  * @param {Object} matiqData - Tournament data from MatIQ API
- * @returns {Object} Data formatted for DoubleEliminationBracket
+ * @returns {Object} Data formatted with separate winners and consolation brackets
  */
 export const transformToDoubleEliminationFormat = (matiqData) => {
   if (!matiqData || !matiqData.matches) {
     return { upper: [], lower: [] };
   }
 
-  const upper = [];
-  const lower = [];
+  const winners = [];
+  const consolation = [];
 
   matiqData.matches.forEach(match => {
-    // Determine if match belongs to winners bracket or losers bracket
+    // Determine if match belongs to winners bracket or consolation bracket
     const matchName = match.name || '';
     
-    if (matchName.startsWith('WB ') || matchName.includes('WB ') || matchName === 'Grand Final') {
-      // Winners bracket matches (including Grand Final)
-      upper.push(match);
-    } else if (matchName.startsWith('LB ') || matchName.includes('LB ')) {
-      // Losers bracket matches
-      lower.push(match);
+    if (matchName.includes('WB ') || 
+        matchName === 'Championship' ||
+        matchName.includes('WB Semifinal') ||
+        matchName.includes('Winners')) {
+      // Winners bracket matches - path to championship
+      winners.push(match);
+    } else if (matchName.includes('LB ') || 
+               matchName === '3rd Place Match' ||
+               matchName.includes('Consolation') ||
+               matchName.includes('Losers')) {
+      // Consolation bracket matches - path to 3rd place and below
+      consolation.push(match);
     } else {
-      // Default to winners bracket for unclear cases
-      upper.push(match);
+      // For unclear cases, look at the match flow to determine bracket
+      const nextMatch = matiqData.matches.find(m => m.id === match.nextMatchId);
+      if (nextMatch) {
+        const nextMatchName = nextMatch.name || '';
+        if (nextMatchName.includes('WB ') || 
+            nextMatchName === 'Championship' ||
+            nextMatchName.includes('Winners')) {
+          winners.push(match);
+        } else if (nextMatchName.includes('LB ') || 
+                   nextMatchName === '3rd Place Match' ||
+                   nextMatchName.includes('Consolation') ||
+                   nextMatchName.includes('Losers')) {
+          consolation.push(match);
+        } else {
+          // Default to winners bracket for ambiguous cases
+          winners.push(match);
+        }
+      } else {
+        // Terminal match - check if it's championship (winners) or 3rd place (consolation)
+        if (matchName === 'Championship' || matchName.includes('Championship')) {
+          winners.push(match);
+        } else if (matchName === '3rd Place Match' || matchName.includes('3rd Place')) {
+          consolation.push(match);
+        } else {
+          // Default to winners bracket
+          winners.push(match);
+        }
+      }
     }
   });
 
-  return { upper, lower };
+  // Return with consistent naming for the component
+  return { 
+    upper: winners, 
+    lower: consolation 
+  };
 };
 
 /**
