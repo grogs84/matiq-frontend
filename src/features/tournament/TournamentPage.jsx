@@ -5,7 +5,7 @@ import { Layout } from '../../components/common';
 import BracketView from './components/BracketView.jsx';
 import ResultsView from './components/ResultsView.jsx';
 import BracketToggle from './components/BracketToggle.jsx';
-import { mockTournamentData, mockTournamentInProgress, mockEmptyTournament } from './services/mockTournamentData.js';
+import { mockTournamentData, mockTournamentInProgress, mockEmptyTournament, mock32PersonTournament, mockDoubleEliminationTournament } from './services/mockTournamentData.js';
 
 /**
  * Tournament page component for displaying bracket and results
@@ -17,6 +17,19 @@ function TournamentPage() {
   const [tournamentData, setTournamentData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedDemo, setSelectedDemo] = useState(id || '1');
+
+  // Check if this is the demo page
+  const isDemoPage = window.location.pathname === '/bracket-demo';
+
+  // Demo options for the demo page
+  const demoOptions = [
+    { id: '1', name: '8-Person Single Elimination', description: 'Classic NCAA-style bracket' },
+    { id: '4', name: '32-Person Single Elimination', description: 'Full championship bracket' },
+    { id: '5', name: 'Double Elimination', description: 'Winners and losers brackets' },
+    { id: '2', name: 'Tournament In Progress', description: 'Partially completed matches' },
+    { id: '3', name: 'Upcoming Tournament', description: 'Empty bracket template' }
+  ];
 
   // Simulate API call to fetch tournament data
   useEffect(() => {
@@ -28,9 +41,12 @@ function TournamentPage() {
         // Simulate network delay
         await new Promise(resolve => setTimeout(resolve, 1000));
         
+        // Use selectedDemo for demo page, otherwise use id from URL
+        const currentId = isDemoPage ? selectedDemo : id;
+        
         // Mock data selection based on ID
         let data;
-        switch (id) {
+        switch (currentId) {
           case '1':
             data = mockTournamentData;
             break;
@@ -39,6 +55,12 @@ function TournamentPage() {
             break;
           case '3':
             data = mockEmptyTournament;
+            break;
+          case '4':
+            data = mock32PersonTournament;
+            break;
+          case '5':
+            data = mockDoubleEliminationTournament;
             break;
           default:
             data = mockTournamentData;
@@ -54,7 +76,7 @@ function TournamentPage() {
     };
 
     fetchTournamentData();
-  }, [id]);
+  }, [id, selectedDemo, isDemoPage]);
 
   const handleViewChange = (view) => {
     setActiveView(view);
@@ -106,6 +128,35 @@ function TournamentPage() {
           </div>
         </div>
 
+        {/* Demo Selector - only show on demo page */}
+        {isDemoPage && (
+          <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg">
+            <h3 className="text-lg font-medium text-blue-900 dark:text-blue-200 mb-3">
+              🏆 Bracket Demos
+            </h3>
+            <p className="text-sm text-blue-700 dark:text-blue-300 mb-4">
+              Explore different tournament bracket types and sizes to see how the visualization adapts.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {demoOptions.map((demo) => (
+                <button
+                  key={demo.id}
+                  onClick={() => setSelectedDemo(demo.id)}
+                  disabled={isLoading}
+                  className={`p-3 text-left rounded-lg border transition-all ${
+                    selectedDemo === demo.id
+                      ? 'bg-blue-100 dark:bg-blue-800 border-blue-300 dark:border-blue-600 text-blue-900 dark:text-blue-100'
+                      : 'bg-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700'
+                  } ${isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                >
+                  <div className="font-medium text-sm">{demo.name}</div>
+                  <div className="text-xs opacity-75 mt-1">{demo.description}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* View Toggle */}
         <div className="mb-6">
           <BracketToggle
@@ -143,10 +194,11 @@ function TournamentPage() {
               This is a proof of concept for tournament bracket visualization.
             </p>
             <div className="text-xs text-yellow-600 dark:text-yellow-400">
-              <p>• Tournament ID: {id}</p>
+              <p>• Tournament ID: {isDemoPage ? selectedDemo : id}</p>
               <p>• Active View: {activeView}</p>
               <p>• Data Source: Mock Data</p>
               <p>• Library: @g-loot/react-tournament-brackets</p>
+              {isDemoPage && <p>• Demo Mode: {demoOptions.find(d => d.id === selectedDemo)?.name}</p>}
             </div>
           </div>
         )}
