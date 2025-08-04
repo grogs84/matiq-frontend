@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useMemo } from 'react';
-import { SingleEliminationBracket, DoubleEliminationBracket } from '@g-loot/react-tournament-brackets';
+import { SingleEliminationBracket } from '@g-loot/react-tournament-brackets';
 import { transformTournamentData, validateTournamentData, getTournamentStats, isDoubleEliminationTournament } from '../utils/dataTransformation.js';
 
 /**
@@ -219,11 +219,68 @@ function BracketView({ tournamentData, onMatchClick, isLoading = false, error = 
           
           {/* Render brackets based on type */}
           {isDoubleElimination ? (
-            // Use DoubleEliminationBracket component for double elimination
-            <DoubleEliminationBracket
-              matches={bracketData}
-              matchComponent={MatchComponent}
-            />
+            // Custom wrestling-style double elimination layout
+            <div className="wrestling-double-elimination">
+              {/* Winners Bracket Section */}
+              <div className="mb-8">
+                <div className="flex items-center mb-4">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-lg font-semibold text-amber-600">🏆</span>
+                    <h3 className="text-lg font-semibold text-neutral-800 dark:text-neutral-200">
+                      Winners Bracket
+                    </h3>
+                    <span className="text-sm text-neutral-500 bg-amber-50 dark:bg-amber-900/20 px-2 py-1 rounded">
+                      {bracketData.upper?.length || 0} matches
+                    </span>
+                  </div>
+                </div>
+                <div className="bg-amber-50 dark:bg-amber-900/10 p-4 rounded-lg border-l-4 border-amber-400">
+                  <p className="text-sm text-amber-700 dark:text-amber-300 mb-3">
+                    Championship path - determines 1st and 2nd place
+                  </p>
+                  {bracketData.upper && bracketData.upper.length > 0 ? (
+                    <SingleEliminationBracket
+                      matches={bracketData.upper}
+                      matchComponent={MatchComponent}
+                    />
+                  ) : (
+                    <div className="text-center text-neutral-500 py-4">
+                      No winners bracket matches available
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Consolation Bracket Section */}
+              <div>
+                <div className="flex items-center mb-4">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-lg font-semibold text-blue-600">🥉</span>
+                    <h3 className="text-lg font-semibold text-neutral-800 dark:text-neutral-200">
+                      Consolation Bracket
+                    </h3>
+                    <span className="text-sm text-neutral-500 bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded">
+                      {bracketData.lower?.length || 0} matches
+                    </span>
+                  </div>
+                </div>
+                <div className="bg-blue-50 dark:bg-blue-900/10 p-4 rounded-lg border-l-4 border-blue-400">
+                  <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
+                    Consolation path - determines 3rd place and below
+                  </p>
+                  {bracketData.lower && bracketData.lower.length > 0 ? (
+                    <SingleEliminationBracket
+                      matches={bracketData.lower}
+                      matchComponent={MatchComponent}
+                    />
+                  ) : (
+                    <div className="text-center text-neutral-500 py-4">
+                      No consolation bracket matches available
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           ) : (
             // Standard single elimination bracket
             <SingleEliminationBracket
@@ -238,7 +295,9 @@ function BracketView({ tournamentData, onMatchClick, isLoading = false, error = 
       <div className="mt-4 text-center text-sm text-neutral-500 dark:text-neutral-400 sm:hidden">
         👈 Scroll horizontally to view full bracket
         {isDoubleElimination && (
-          <div className="mt-1 text-xs">Double elimination bracket shows both winners and losers brackets</div>
+          <div className="mt-1 text-xs">
+            Wrestling double elimination: Winners bracket (1st/2nd place) and Consolation bracket (3rd+ place)
+          </div>
         )}
       </div>
     </div>

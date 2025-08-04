@@ -446,12 +446,12 @@ export const mockDoubleEliminationTournament = {
       ] 
     },
 
-    // Winners Bracket Final (1 match: 2 → 1)
+    // Winners Bracket Final determines 1st and 2nd place
     { 
       id: 7, 
       name: "WB Final", 
-      nextMatchId: 15, 
-      nextLooserMatchId: 14, // Loser goes to LB Semifinal
+      nextMatchId: null, // No further matches - this determines championship
+      nextLooserMatchId: null, // Winner is 1st place, loser is 2nd place
       tournamentRoundText: "UB 3", 
       startTime: "2024-03-22", 
       state: "DONE", 
@@ -532,33 +532,37 @@ export const mockDoubleEliminationTournament = {
       ] 
     },
 
-    // Losers Bracket Semifinal (1 match: LB R3 winner vs WB Final loser → 1)
+    // Losers Bracket Semifinal determines who goes to 3rd place match
     { 
       id: 14, 
       name: "LB Semifinal", 
-      nextMatchId: 15, 
+      nextMatchId: 15, // Goes to 3rd place match
       nextLooserMatchId: null,
       tournamentRoundText: "LB 4", 
       startTime: "2024-03-22", 
       state: "DONE", 
       participants: [
-        { id: "p2", resultText: "16", isWinner: true, status: "PLAYED", name: "Tony Davis (Penn State)" }, 
-        { id: "p8", resultText: "12", isWinner: false, status: "PLAYED", name: "Henry Garcia (Nebraska)" }
+        { id: "p2", resultText: "14", isWinner: true, status: "PLAYED", name: "Tony Davis (Penn State)" }, 
+        { id: "p5", resultText: "10", isWinner: false, status: "PLAYED", name: "Eric Wilson (Minnesota)" }
       ] 
     },
 
-    // Championship Final (Grand Final - WB winner vs LB winner)
+    // Winners Bracket determines 1st and 2nd place (Marcus Johnson 1st, Henry Garcia 2nd)
+    // Marcus Johnson (Iowa) wins 1st place as winners bracket champion
+    // Henry Garcia (Nebraska) gets 2nd place as winners bracket runner-up
+    
+    // Losers Bracket Final determines 3rd place
     { 
       id: 15, 
-      name: "Championship", 
+      name: "3rd Place Match", 
       nextMatchId: null, 
       nextLooserMatchId: null,
-      tournamentRoundText: "UB 4", 
+      tournamentRoundText: "LB 5", 
       startTime: "2024-03-23", 
       state: "DONE", 
       participants: [
-        { id: "p1", resultText: "18", isWinner: true, status: "PLAYED", name: "Marcus Johnson (Iowa)" }, 
-        { id: "p2", resultText: "14", isWinner: false, status: "PLAYED", name: "Tony Davis (Penn State)" }
+        { id: "p2", resultText: "16", isWinner: true, status: "PLAYED", name: "Tony Davis (Penn State)" }, 
+        { id: "p4", resultText: "11", isWinner: false, status: "PLAYED", name: "Derek Brown (Michigan)" }
       ] 
     }
   ]
