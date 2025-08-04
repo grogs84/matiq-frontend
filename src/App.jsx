@@ -3,6 +3,7 @@ import Navbar from './components/Navbar.jsx';
 import HomePage from './components/HomePage.jsx';
 import ProfilePage from './components/ProfilePage.jsx';
 import PersonProfile from './features/person/PersonProfile.jsx';
+import Login from './pages/Login.jsx';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <main className="pt-16">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/person/:slug" element={<PersonProfile />} />
             <Route path="/profile/:slug" element={<ProfilePage />} />
           </Routes>
