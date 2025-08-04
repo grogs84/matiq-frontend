@@ -18,6 +18,9 @@ dist-ssr
 # Vercel
 .vercel
 
+# Test files
+src/tests/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
