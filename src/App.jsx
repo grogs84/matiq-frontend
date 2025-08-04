@@ -3,6 +3,7 @@ import Navbar from './components/Navbar.jsx';
 import HomePage from './components/HomePage.jsx';
 import ProfilePage from './components/ProfilePage.jsx';
 import PersonProfile from './features/person/PersonProfile.jsx';
+import { TournamentPage } from './features/tournament';
 
 function App() {
   return (
@@ -14,6 +15,8 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/person/:slug" element={<PersonProfile />} />
             <Route path="/profile/:slug" element={<ProfilePage />} />
+            <Route path="/tournament/:id/bracket" element={<TournamentPage />} />
+            <Route path="/bracket-demo" element={<TournamentPage />} />
           </Routes>
         </main>
       </div>

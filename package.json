@@ -12,9 +12,11 @@
     "serve": "vite preview --port 5173"
   },
   "dependencies": {
+    "@g-loot/react-tournament-brackets": "^1.0.31-rc",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^7.7.1"
+    "react-router-dom": "^7.7.1",
+    "react-svg-pan-zoom": "^3.13.1"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
