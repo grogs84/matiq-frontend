@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useNavigate, useLocation } from 'react-router-dom';
 import DarkModeToggle from './DarkModeToggle.jsx';
+import useAuth from '../hooks/useAuth.jsx';
 
 /**
  * Navigation bar component with MatIQ branding and dark mode
@@ -8,9 +9,15 @@ import DarkModeToggle from './DarkModeToggle.jsx';
 function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isAuthenticated, logout } = useAuth();
   
   const handleHomeClick = () => {
     navigate('/');
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login', { replace: true });
   };
 
   const isHomePage = location.pathname === '/';
@@ -55,6 +62,23 @@ function Navbar() {
 
             {/* Dark Mode Toggle */}
             <DarkModeToggle />
+
+            {/* Authentication */}
+            {isAuthenticated ? (
+              <button
+                onClick={handleLogout}
+                className="px-3 py-1.5 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-md transition-colors"
+              >
+                Logout
+              </button>
+            ) : (
+              <button
+                onClick={() => navigate('/login')}
+                className="px-3 py-1.5 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-md transition-colors"
+              >
+                Login
+              </button>
+            )}
           </div>
         </div>
       </div>
