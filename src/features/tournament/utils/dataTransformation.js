@@ -6,15 +6,86 @@
 /**
  * Transform MatIQ tournament data to bracket library format
  * @param {Object} matiqData - Tournament data from MatIQ API
- * @returns {Array} Data formatted for react-tournament-brackets
+ * @returns {Array|Object} Data formatted for react-tournament-brackets
  */
 export const transformTournamentData = (matiqData) => {
   if (!matiqData || !matiqData.matches) {
     return [];
   }
 
-  // Return matches directly as the library expects an array of matches
+  // Check if this is a double elimination tournament
+  const isDoubleElimination = isDoubleEliminationTournament(matiqData);
+  
+  if (isDoubleElimination) {
+    // Transform to double elimination format with upper and lower brackets
+    return transformToDoubleEliminationFormat(matiqData);
+  }
+
+  // Return matches directly for single elimination as the library expects an array of matches
   return matiqData.matches;
+};
+
+/**
+ * Check if tournament is double elimination
+ * @param {Object} tournamentData - Tournament data
+ * @returns {boolean} True if double elimination
+ */
+export const isDoubleEliminationTournament = (tournamentData) => {
+  if (!tournamentData) return false;
+  
+  // Check tournament name for "Double Elimination"
+  if (tournamentData.tournament?.name?.toLowerCase().includes('double elimination')) {
+    return true;
+  }
+  
+  // Check if any matches have WB (Winners Bracket) or LB (Losers Bracket) prefixes
+  if (tournamentData.matches?.some(match => 
+    match.name?.includes('WB ') || 
+    match.name?.includes('LB ') ||
+    match.name?.includes('Winners') ||
+    match.name?.includes('Losers')
+  )) {
+    return true;
+  }
+  
+  // Check tournament ID (ID 5 is our double elimination demo)
+  if (tournamentData.tournament?.id === 5) {
+    return true;
+  }
+  
+  return false;
+};
+
+/**
+ * Transform matches to double elimination format
+ * @param {Object} matiqData - Tournament data from MatIQ API
+ * @returns {Object} Data formatted for DoubleEliminationBracket
+ */
+export const transformToDoubleEliminationFormat = (matiqData) => {
+  if (!matiqData || !matiqData.matches) {
+    return { upper: [], lower: [] };
+  }
+
+  const upper = [];
+  const lower = [];
+
+  matiqData.matches.forEach(match => {
+    // Determine if match belongs to winners bracket or losers bracket
+    const matchName = match.name || '';
+    
+    if (matchName.startsWith('WB ') || matchName.includes('WB ') || matchName === 'Grand Final') {
+      // Winners bracket matches (including Grand Final)
+      upper.push(match);
+    } else if (matchName.startsWith('LB ') || matchName.includes('LB ')) {
+      // Losers bracket matches
+      lower.push(match);
+    } else {
+      // Default to winners bracket for unclear cases
+      upper.push(match);
+    }
+  });
+
+  return { upper, lower };
 };
 
 /**

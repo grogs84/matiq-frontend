@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useMemo } from 'react';
-import { SingleEliminationBracket } from '@g-loot/react-tournament-brackets';
-import { transformTournamentData, validateTournamentData, getTournamentStats } from '../utils/dataTransformation.js';
+import { SingleEliminationBracket, DoubleEliminationBracket } from '@g-loot/react-tournament-brackets';
+import { transformTournamentData, validateTournamentData, getTournamentStats, isDoubleEliminationTournament } from '../utils/dataTransformation.js';
 
 /**
  * BracketView component for displaying tournament brackets
@@ -15,11 +15,16 @@ import { transformTournamentData, validateTournamentData, getTournamentStats } f
 function BracketView({ tournamentData, onMatchClick, isLoading = false, error = null }) {
   const [selectedMatch, setSelectedMatch] = useState(null);
 
+  // Detect if this is a double elimination tournament
+  const isDoubleElimination = useMemo(() => {
+    return isDoubleEliminationTournament(tournamentData);
+  }, [tournamentData]);
+
   // Transform and validate data
   const bracketData = useMemo(() => {
-    if (!tournamentData) return [];
+    if (!tournamentData) return isDoubleElimination ? { upper: [], lower: [] } : [];
     return transformTournamentData(tournamentData);
-  }, [tournamentData]);
+  }, [tournamentData, isDoubleElimination]);
 
   const validation = useMemo(() => {
     return validateTournamentData(tournamentData);
@@ -133,7 +138,7 @@ function BracketView({ tournamentData, onMatchClick, isLoading = false, error = 
   }
 
   // Empty state
-  if (!bracketData || bracketData.length === 0) {
+  if (!bracketData || (isDoubleElimination ? (!bracketData.upper || bracketData.upper.length === 0) && (!bracketData.lower || bracketData.lower.length === 0) : bracketData.length === 0)) {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
@@ -188,10 +193,17 @@ function BracketView({ tournamentData, onMatchClick, isLoading = false, error = 
       {/* Responsive Bracket Container */}
       <div className="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-neutral-400 scrollbar-track-neutral-100 dark:scrollbar-thumb-neutral-600 dark:scrollbar-track-neutral-800">
         <div className="min-w-max p-4 bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900 dark:to-neutral-800 rounded-lg">
-          <SingleEliminationBracket
-            matches={bracketData}
-            matchComponent={MatchComponent}
-          />
+          {isDoubleElimination ? (
+            <DoubleEliminationBracket
+              matches={bracketData}
+              matchComponent={MatchComponent}
+            />
+          ) : (
+            <SingleEliminationBracket
+              matches={bracketData}
+              matchComponent={MatchComponent}
+            />
+          )}
         </div>
       </div>
 
