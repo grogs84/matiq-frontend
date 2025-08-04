@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useMemo } from 'react';
-import { SingleEliminationBracket } from '@g-loot/react-tournament-brackets';
+import { SingleEliminationBracket, DoubleEliminationBracket } from '@g-loot/react-tournament-brackets';
 import { transformTournamentData, validateTournamentData, getTournamentStats, isDoubleEliminationTournament } from '../utils/dataTransformation.js';
 
 /**
@@ -14,7 +14,6 @@ import { transformTournamentData, validateTournamentData, getTournamentStats, is
  */
 function BracketView({ tournamentData, onMatchClick, isLoading = false, error = null }) {
   const [selectedMatch, setSelectedMatch] = useState(null);
-  const [activeTab, setActiveTab] = useState('winners'); // 'winners' or 'consolation'
 
   // Detect if this is a double elimination tournament
   const isDoubleElimination = useMemo(() => {
@@ -29,21 +28,19 @@ function BracketView({ tournamentData, onMatchClick, isLoading = false, error = 
     
     const transformed = transformTournamentData(tournamentData);
     
-    // Debug logging to see the structure
+    // Debug logging to see the structure (simplified)
     console.log('🏆 Tournament Data Debug:', {
       isDoubleElimination,
       originalMatches: tournamentData.matches?.length,
-      transformed,
-      transformedType: typeof transformed,
-      hasWinners: transformed?.upper?.length,
-      hasConsolation: transformed?.lower?.length
+      hasUpper: transformed?.upper?.length,
+      hasLower: transformed?.lower?.length
     });
     
     // For double elimination, return separate brackets
     if (isDoubleElimination) {
       return {
-        winners: transformed.upper || [],
-        consolation: transformed.lower || []
+        upper: transformed.upper || [],
+        lower: transformed.lower || []
       };
     }
     
@@ -162,7 +159,7 @@ function BracketView({ tournamentData, onMatchClick, isLoading = false, error = 
   }
 
   // Empty state
-  if (!bracketData || (isDoubleElimination ? (!bracketData.winners || bracketData.winners.length === 0) && (!bracketData.consolation || bracketData.consolation.length === 0) : bracketData.length === 0)) {
+  if (!bracketData || (isDoubleElimination ? (!bracketData.upper || bracketData.upper.length === 0) && (!bracketData.lower || bracketData.lower.length === 0) : bracketData.length === 0)) {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
@@ -177,11 +174,6 @@ function BracketView({ tournamentData, onMatchClick, isLoading = false, error = 
       </div>
     );
   }
-
-  // Get current bracket data based on active tab
-  const currentBracketData = isDoubleElimination 
-    ? (activeTab === 'winners' ? bracketData.winners : bracketData.consolation)
-    : bracketData;
 
   return (
     <div className="tournament-bracket-container">
@@ -219,97 +211,23 @@ function BracketView({ tournamentData, onMatchClick, isLoading = false, error = 
         </div>
       )}
 
-      {/* Tab Navigation for Double Elimination */}
-      {isDoubleElimination && (
-        <div className="mb-6">
-          <div className="flex bg-neutral-100 dark:bg-neutral-800 rounded-lg p-1">
-            <button
-              onClick={() => setActiveTab('winners')}
-              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
-                activeTab === 'winners'
-                  ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 shadow-sm'
-                  : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100'
-              }`}
-            >
-              🏆 Winners Bracket
-              <span className="ml-2 text-xs bg-neutral-200 dark:bg-neutral-600 px-2 py-1 rounded-full">
-                {bracketData.winners?.length || 0} matches
-              </span>
-            </button>
-            <button
-              onClick={() => setActiveTab('consolation')}
-              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
-                activeTab === 'consolation'
-                  ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 shadow-sm'
-                  : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100'
-              }`}
-            >
-              🥉 Consolation Bracket
-              <span className="ml-2 text-xs bg-neutral-200 dark:bg-neutral-600 px-2 py-1 rounded-full">
-                {bracketData.consolation?.length || 0} matches
-              </span>
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Tournament Info remains the same */}
 
       {/* Responsive Bracket Container */}
       <div className="w-full overflow-x-auto overflow-y-visible scrollbar-thin scrollbar-thumb-neutral-400 scrollbar-track-neutral-100 dark:scrollbar-thumb-neutral-600 dark:scrollbar-track-neutral-800">
         <div className="min-w-max p-6 bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900 dark:to-neutral-800 rounded-lg">
           
-          {/* Render brackets differently based on type */}
-          {isDoubleElimination && activeTab === 'consolation' ? (
-            // Custom consolation bracket layout
-            <div className="consolation-bracket-layout">
-              <h3 className="text-lg font-semibold text-neutral-800 dark:text-neutral-200 mb-6 text-center">
-                Consolation Bracket - Path to 3rd Place
-              </h3>
-              <div className="grid gap-6" style={{ gridTemplateColumns: 'repeat(4, 1fr)', minWidth: '1000px' }}>
-                {/* Round 1 */}
-                <div className="space-y-4">
-                  <h4 className="text-sm font-medium text-neutral-600 dark:text-neutral-400 text-center">Round 1</h4>
-                  {currentBracketData
-                    .filter(match => match.tournamentRoundText === "1")
-                    .map(match => (
-                      <MatchComponent key={match.id} match={match} />
-                    ))}
-                </div>
-                
-                {/* Round 2 */}
-                <div className="space-y-4">
-                  <h4 className="text-sm font-medium text-neutral-600 dark:text-neutral-400 text-center">Round 2</h4>
-                  {currentBracketData
-                    .filter(match => match.tournamentRoundText === "2")
-                    .map(match => (
-                      <MatchComponent key={match.id} match={match} />
-                    ))}
-                </div>
-                
-                {/* Round 3 */}
-                <div className="space-y-4">
-                  <h4 className="text-sm font-medium text-neutral-600 dark:text-neutral-400 text-center">Round 3</h4>
-                  {currentBracketData
-                    .filter(match => match.tournamentRoundText === "3")
-                    .map(match => (
-                      <MatchComponent key={match.id} match={match} />
-                    ))}
-                </div>
-                
-                {/* Finals */}
-                <div className="space-y-4">
-                  <h4 className="text-sm font-medium text-neutral-600 dark:text-neutral-400 text-center">3rd Place</h4>
-                  {currentBracketData
-                    .filter(match => match.tournamentRoundText === "4")
-                    .map(match => (
-                      <MatchComponent key={match.id} match={match} />
-                    ))}
-                </div>
-              </div>
-            </div>
+          {/* Render brackets based on type */}
+          {isDoubleElimination ? (
+            // Use DoubleEliminationBracket component for double elimination
+            <DoubleEliminationBracket
+              matches={bracketData}
+              matchComponent={MatchComponent}
+            />
           ) : (
             // Standard single elimination bracket
             <SingleEliminationBracket
-              matches={currentBracketData}
+              matches={bracketData}
               matchComponent={MatchComponent}
             />
           )}
@@ -319,8 +237,8 @@ function BracketView({ tournamentData, onMatchClick, isLoading = false, error = 
       {/* Enhanced Mobile Scroll Hint */}
       <div className="mt-4 text-center text-sm text-neutral-500 dark:text-neutral-400 sm:hidden">
         👈 Scroll horizontally to view full bracket
-        {isDoubleElimination && activeTab === 'consolation' && (
-          <div className="mt-1 text-xs">Consolation bracket shows all rounds - scroll to see 3rd place match</div>
+        {isDoubleElimination && (
+          <div className="mt-1 text-xs">Double elimination bracket shows both winners and losers brackets</div>
         )}
       </div>
     </div>

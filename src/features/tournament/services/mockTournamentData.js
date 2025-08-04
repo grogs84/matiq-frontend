@@ -364,34 +364,202 @@ export const mockDoubleEliminationTournament = {
     division: "Big Ten Conference"
   },
   matches: [
-    // Winners Bracket Round 1
-    { id: 1, name: "WB Round 1 - Match 1", nextMatchId: 9, tournamentRoundText: "1", startTime: "2024-03-20", state: "DONE", participants: [{ id: "p1", resultText: "8", isWinner: true, status: "PLAYED", name: "Marcus Johnson (Iowa)" }, { id: "p2", resultText: "5", isWinner: false, status: "PLAYED", name: "Tony Davis (Penn State)" }] },
-    { id: 2, name: "WB Round 1 - Match 2", nextMatchId: 9, tournamentRoundText: "1", startTime: "2024-03-20", state: "DONE", participants: [{ id: "p3", resultText: "6", isWinner: false, status: "PLAYED", name: "Carlos White (Ohio State)" }, { id: "p4", resultText: "9", isWinner: true, status: "PLAYED", name: "Derek Brown (Michigan)" }] },
-    { id: 3, name: "WB Round 1 - Match 3", nextMatchId: 10, tournamentRoundText: "1", startTime: "2024-03-20", state: "DONE", participants: [{ id: "p5", resultText: "7", isWinner: true, status: "PLAYED", name: "Eric Wilson (Minnesota)" }, { id: "p6", resultText: "4", isWinner: false, status: "PLAYED", name: "Frank Miller (Wisconsin)" }] },
-    { id: 4, name: "WB Round 1 - Match 4", nextMatchId: 10, tournamentRoundText: "1", startTime: "2024-03-20", state: "DONE", participants: [{ id: "p7", resultText: "5", isWinner: false, status: "PLAYED", name: "Gary Taylor (Illinois)" }, { id: "p8", resultText: "8", isWinner: true, status: "PLAYED", name: "Henry Garcia (Nebraska)" }] },
+    // Winners Bracket Round 1 (4 matches: 8 → 4)
+    { 
+      id: 1, 
+      name: "WB Round 1 - Match 1", 
+      nextMatchId: 5, 
+      nextLooserMatchId: 9, // Loser goes to LB Round 1 - Match 1
+      tournamentRoundText: "UB 1", 
+      startTime: "2024-03-20", 
+      state: "DONE", 
+      participants: [
+        { id: "p1", resultText: "8", isWinner: true, status: "PLAYED", name: "Marcus Johnson (Iowa)" }, 
+        { id: "p2", resultText: "5", isWinner: false, status: "PLAYED", name: "Tony Davis (Penn State)" }
+      ] 
+    },
+    { 
+      id: 2, 
+      name: "WB Round 1 - Match 2", 
+      nextMatchId: 5, 
+      nextLooserMatchId: 9, // Loser goes to LB Round 1 - Match 1
+      tournamentRoundText: "UB 1", 
+      startTime: "2024-03-20", 
+      state: "DONE", 
+      participants: [
+        { id: "p3", resultText: "6", isWinner: false, status: "PLAYED", name: "Carlos White (Ohio State)" }, 
+        { id: "p4", resultText: "9", isWinner: true, status: "PLAYED", name: "Derek Brown (Michigan)" }
+      ] 
+    },
+    { 
+      id: 3, 
+      name: "WB Round 1 - Match 3", 
+      nextMatchId: 6, 
+      nextLooserMatchId: 10, // Loser goes to LB Round 1 - Match 2
+      tournamentRoundText: "UB 1", 
+      startTime: "2024-03-20", 
+      state: "DONE", 
+      participants: [
+        { id: "p5", resultText: "7", isWinner: true, status: "PLAYED", name: "Eric Wilson (Minnesota)" }, 
+        { id: "p6", resultText: "4", isWinner: false, status: "PLAYED", name: "Frank Miller (Wisconsin)" }
+      ] 
+    },
+    { 
+      id: 4, 
+      name: "WB Round 1 - Match 4", 
+      nextMatchId: 6, 
+      nextLooserMatchId: 10, // Loser goes to LB Round 1 - Match 2
+      tournamentRoundText: "UB 1", 
+      startTime: "2024-03-20", 
+      state: "DONE", 
+      participants: [
+        { id: "p7", resultText: "5", isWinner: false, status: "PLAYED", name: "Gary Taylor (Illinois)" }, 
+        { id: "p8", resultText: "8", isWinner: true, status: "PLAYED", name: "Henry Garcia (Nebraska)" }
+      ] 
+    },
     
-    // Losers Bracket Round 1 (First round losers)
-    { id: 5, name: "LB Round 1 - Match 1", nextMatchId: 11, tournamentRoundText: "1", startTime: "2024-03-20", state: "DONE", participants: [{ id: "p2", resultText: "6", isWinner: true, status: "PLAYED", name: "Tony Davis (Penn State)" }, { id: "p3", resultText: "3", isWinner: false, status: "PLAYED", name: "Carlos White (Ohio State)" }] },
-    { id: 6, name: "LB Round 1 - Match 2", nextMatchId: 12, tournamentRoundText: "1", startTime: "2024-03-20", state: "DONE", participants: [{ id: "p6", resultText: "7", isWinner: true, status: "PLAYED", name: "Frank Miller (Wisconsin)" }, { id: "p7", resultText: "4", isWinner: false, status: "PLAYED", name: "Gary Taylor (Illinois)" }] },
-    
-    // Winners Bracket Round 2 (Semifinals)
-    { id: 9, name: "WB Semifinal 1", nextMatchId: 15, tournamentRoundText: "2", startTime: "2024-03-21", state: "DONE", participants: [{ id: "p1", resultText: "12", isWinner: true, status: "PLAYED", name: "Marcus Johnson (Iowa)" }, { id: "p4", resultText: "8", isWinner: false, status: "PLAYED", name: "Derek Brown (Michigan)" }] },
-    { id: 10, name: "WB Semifinal 2", nextMatchId: 15, tournamentRoundText: "2", startTime: "2024-03-21", state: "DONE", participants: [{ id: "p5", resultText: "9", isWinner: false, status: "PLAYED", name: "Eric Wilson (Minnesota)" }, { id: "p8", resultText: "11", isWinner: true, status: "PLAYED", name: "Henry Garcia (Nebraska)" }] },
-    
-    // Losers Bracket Round 2 (First round losers + second round losers)
-    { id: 11, name: "LB Round 2 - Match 1", nextMatchId: 13, tournamentRoundText: "2", startTime: "2024-03-21", state: "DONE", participants: [{ id: "p2", resultText: "10", isWinner: true, status: "PLAYED", name: "Tony Davis (Penn State)" }, { id: "p4", resultText: "7", isWinner: false, status: "PLAYED", name: "Derek Brown (Michigan)" }] },
-    { id: 12, name: "LB Round 2 - Match 2", nextMatchId: 14, tournamentRoundText: "2", startTime: "2024-03-21", state: "DONE", participants: [{ id: "p6", resultText: "8", isWinner: false, status: "PLAYED", name: "Frank Miller (Wisconsin)" }, { id: "p5", resultText: "11", isWinner: true, status: "PLAYED", name: "Eric Wilson (Minnesota)" }] },
-    
-    // Losers Bracket Round 3
-    { id: 13, name: "LB Round 3 - Match 1", nextMatchId: 16, tournamentRoundText: "3", startTime: "2024-03-22", state: "DONE", participants: [{ id: "p2", resultText: "13", isWinner: true, status: "PLAYED", name: "Tony Davis (Penn State)" }, { id: "p5", resultText: "9", isWinner: false, status: "PLAYED", name: "Eric Wilson (Minnesota)" }] },
-    
-    // Losers Bracket includes winners bracket semifinal losers
-    { id: 14, name: "LB Round 3 - Match 2", nextMatchId: 16, tournamentRoundText: "3", startTime: "2024-03-22", state: "DONE", participants: [{ id: "p8", resultText: "12", isWinner: true, status: "PLAYED", name: "Henry Garcia (Nebraska)" }, { id: "p6", resultText: "8", isWinner: false, status: "PLAYED", name: "Frank Miller (Wisconsin)" }] },
-    
-    // Winners Bracket Final - Championship
-    { id: 15, name: "Championship", nextMatchId: null, tournamentRoundText: "3", startTime: "2024-03-22", state: "DONE", participants: [{ id: "p1", resultText: "15", isWinner: true, status: "PLAYED", name: "Marcus Johnson (Iowa)" }, { id: "p8", resultText: "12", isWinner: false, status: "PLAYED", name: "Henry Garcia (Nebraska)" }] },
-    
-    // Losers Bracket Final - 3rd Place Match
-    { id: 16, name: "3rd Place Match", nextMatchId: null, tournamentRoundText: "4", startTime: "2024-03-23", state: "DONE", participants: [{ id: "p2", resultText: "14", isWinner: true, status: "PLAYED", name: "Tony Davis (Penn State)" }, { id: "p8", resultText: "11", isWinner: false, status: "PLAYED", name: "Henry Garcia (Nebraska)" }] }
+    // Winners Bracket Round 2 (2 matches: 4 → 2)  
+    { 
+      id: 5, 
+      name: "WB Semifinal 1", 
+      nextMatchId: 7, 
+      nextLooserMatchId: 13, // Loser goes to LB Round 3 - Match 1
+      tournamentRoundText: "UB 2", 
+      startTime: "2024-03-21", 
+      state: "DONE", 
+      participants: [
+        { id: "p1", resultText: "12", isWinner: true, status: "PLAYED", name: "Marcus Johnson (Iowa)" }, 
+        { id: "p4", resultText: "8", isWinner: false, status: "PLAYED", name: "Derek Brown (Michigan)" }
+      ] 
+    },
+    { 
+      id: 6, 
+      name: "WB Semifinal 2", 
+      nextMatchId: 7, 
+      nextLooserMatchId: 14, // Loser goes to LB Round 3 - Match 2
+      tournamentRoundText: "UB 2", 
+      startTime: "2024-03-21", 
+      state: "DONE", 
+      participants: [
+        { id: "p5", resultText: "9", isWinner: false, status: "PLAYED", name: "Eric Wilson (Minnesota)" }, 
+        { id: "p8", resultText: "11", isWinner: true, status: "PLAYED", name: "Henry Garcia (Nebraska)" }
+      ] 
+    },
+
+    // Winners Bracket Final (1 match: 2 → 1)
+    { 
+      id: 7, 
+      name: "WB Final", 
+      nextMatchId: 15, 
+      nextLooserMatchId: 14, // Loser goes to LB Semifinal
+      tournamentRoundText: "UB 3", 
+      startTime: "2024-03-22", 
+      state: "DONE", 
+      participants: [
+        { id: "p1", resultText: "15", isWinner: true, status: "PLAYED", name: "Marcus Johnson (Iowa)" }, 
+        { id: "p8", resultText: "12", isWinner: false, status: "PLAYED", name: "Henry Garcia (Nebraska)" }
+      ] 
+    },
+
+    // Losers Bracket Round 1 (2 matches: 4 first-round losers → 2)
+    { 
+      id: 9, 
+      name: "LB Round 1 - Match 1", 
+      nextMatchId: 11, 
+      nextLooserMatchId: null,
+      tournamentRoundText: "LB 1", 
+      startTime: "2024-03-20", 
+      state: "DONE", 
+      participants: [
+        { id: "p2", resultText: "6", isWinner: true, status: "PLAYED", name: "Tony Davis (Penn State)" }, 
+        { id: "p3", resultText: "3", isWinner: false, status: "PLAYED", name: "Carlos White (Ohio State)" }
+      ] 
+    },
+    { 
+      id: 10, 
+      name: "LB Round 1 - Match 2", 
+      nextMatchId: 12, 
+      nextLooserMatchId: null,
+      tournamentRoundText: "LB 1", 
+      startTime: "2024-03-20", 
+      state: "DONE", 
+      participants: [
+        { id: "p6", resultText: "7", isWinner: true, status: "PLAYED", name: "Frank Miller (Wisconsin)" }, 
+        { id: "p7", resultText: "4", isWinner: false, status: "PLAYED", name: "Gary Taylor (Illinois)" }
+      ] 
+    },
+
+    // Losers Bracket Round 2 (2 matches: 2 LB R1 winners vs 2 WB semifinal losers → 2)
+    { 
+      id: 11, 
+      name: "LB Round 2 - Match 1", 
+      nextMatchId: 13, 
+      nextLooserMatchId: null,
+      tournamentRoundText: "LB 2", 
+      startTime: "2024-03-21", 
+      state: "DONE", 
+      participants: [
+        { id: "p2", resultText: "10", isWinner: true, status: "PLAYED", name: "Tony Davis (Penn State)" }, 
+        { id: "p4", resultText: "7", isWinner: false, status: "PLAYED", name: "Derek Brown (Michigan)" }
+      ] 
+    },
+    { 
+      id: 12, 
+      name: "LB Round 2 - Match 2", 
+      nextMatchId: 14, 
+      nextLooserMatchId: null,
+      tournamentRoundText: "LB 2", 
+      startTime: "2024-03-21", 
+      state: "DONE", 
+      participants: [
+        { id: "p6", resultText: "8", isWinner: false, status: "PLAYED", name: "Frank Miller (Wisconsin)" }, 
+        { id: "p5", resultText: "11", isWinner: true, status: "PLAYED", name: "Eric Wilson (Minnesota)" }
+      ] 
+    },
+
+    // Losers Bracket Round 3 (1 match: 2 LB R2 winners → 1)
+    { 
+      id: 13, 
+      name: "LB Round 3 - Match 1", 
+      nextMatchId: 14, 
+      nextLooserMatchId: null,
+      tournamentRoundText: "LB 3", 
+      startTime: "2024-03-22", 
+      state: "DONE", 
+      participants: [
+        { id: "p2", resultText: "13", isWinner: true, status: "PLAYED", name: "Tony Davis (Penn State)" }, 
+        { id: "p5", resultText: "9", isWinner: false, status: "PLAYED", name: "Eric Wilson (Minnesota)" }
+      ] 
+    },
+
+    // Losers Bracket Semifinal (1 match: LB R3 winner vs WB Final loser → 1)
+    { 
+      id: 14, 
+      name: "LB Semifinal", 
+      nextMatchId: 15, 
+      nextLooserMatchId: null,
+      tournamentRoundText: "LB 4", 
+      startTime: "2024-03-22", 
+      state: "DONE", 
+      participants: [
+        { id: "p2", resultText: "16", isWinner: true, status: "PLAYED", name: "Tony Davis (Penn State)" }, 
+        { id: "p8", resultText: "12", isWinner: false, status: "PLAYED", name: "Henry Garcia (Nebraska)" }
+      ] 
+    },
+
+    // Championship Final (Grand Final - WB winner vs LB winner)
+    { 
+      id: 15, 
+      name: "Championship", 
+      nextMatchId: null, 
+      nextLooserMatchId: null,
+      tournamentRoundText: "UB 4", 
+      startTime: "2024-03-23", 
+      state: "DONE", 
+      participants: [
+        { id: "p1", resultText: "18", isWinner: true, status: "PLAYED", name: "Marcus Johnson (Iowa)" }, 
+        { id: "p2", resultText: "14", isWinner: false, status: "PLAYED", name: "Tony Davis (Penn State)" }
+      ] 
+    }
   ]
 }

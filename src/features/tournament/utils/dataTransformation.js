@@ -79,12 +79,15 @@ export const transformToDoubleEliminationFormat = (matiqData) => {
     
     if (matchName.includes('WB ') || 
         matchName === 'Championship' ||
+        matchName === 'WB Final' ||
         matchName.includes('WB Semifinal') ||
-        matchName.includes('Winners')) {
+        matchName.includes('Winners') ||
+        matchName.includes('UB ')) {
       // Winners bracket matches - path to championship
       winners.push(match);
     } else if (matchName.includes('LB ') || 
                matchName === '3rd Place Match' ||
+               matchName === 'Grand Final' ||
                matchName.includes('Consolation') ||
                matchName.includes('Losers')) {
       // Consolation bracket matches - path to 3rd place and below
@@ -96,10 +99,13 @@ export const transformToDoubleEliminationFormat = (matiqData) => {
         const nextMatchName = nextMatch.name || '';
         if (nextMatchName.includes('WB ') || 
             nextMatchName === 'Championship' ||
-            nextMatchName.includes('Winners')) {
+            nextMatchName === 'WB Final' ||
+            nextMatchName.includes('Winners') ||
+            nextMatchName.includes('UB ')) {
           winners.push(match);
         } else if (nextMatchName.includes('LB ') || 
                    nextMatchName === '3rd Place Match' ||
+                   nextMatchName === 'Grand Final' ||
                    nextMatchName.includes('Consolation') ||
                    nextMatchName.includes('Losers')) {
           consolation.push(match);
@@ -109,9 +115,9 @@ export const transformToDoubleEliminationFormat = (matiqData) => {
         }
       } else {
         // Terminal match - check if it's championship (winners) or 3rd place (consolation)
-        if (matchName === 'Championship' || matchName.includes('Championship')) {
+        if (matchName === 'Championship' || matchName === 'WB Final' || matchName.includes('Championship')) {
           winners.push(match);
-        } else if (matchName === '3rd Place Match' || matchName.includes('3rd Place')) {
+        } else if (matchName === '3rd Place Match' || matchName.includes('3rd Place') || matchName === 'Grand Final') {
           consolation.push(match);
         } else {
           // Default to winners bracket
